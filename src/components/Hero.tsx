@@ -5,9 +5,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Download } from "lucide-react";
 
 export default function Hero() {
-  // Smooth scroll function for the "View My Work" button
+  // Safe scroll function that verifies the element exists before scrolling
   const scrollToProjects = () => {
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+    const element = document.getElementById("projects");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
@@ -15,7 +18,6 @@ export default function Hero() {
       {/* Premium glowing background effect */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
-      {/* Status Badge */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -28,7 +30,6 @@ export default function Hero() {
         </span>
       </motion.div>
 
-      {/* Headline with Gradient Text */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,21 +43,21 @@ export default function Hero() {
         </h1>
       </motion.div>
 
-      {/* Elevated Pitch */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <p className="text-xl text-muted-foreground max-w-[700px] mb-10 mx-auto leading-relaxed">
+        <p className="text-xl text-muted-foreground max-w-[700px] mb-4 mx-auto leading-relaxed">
           An Electronics & Communication Engineering graduate transitioning into
           software development. I specialize in building real-time,
-          high-performance web applications using React, TypeScript, and robust
-          backend architectures.
+          high-performance web applications.
+        </p>
+        <p className="text-sm text-muted-foreground mb-10 mx-auto">
+          (Have questions? Use the AI chat widget in the bottom right corner!)
         </p>
       </motion.div>
 
-      {/* Functional Buttons */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -71,8 +72,11 @@ export default function Hero() {
           View My Work <ArrowRight size={18} />
         </Button>
 
-        {/* Using standard anchor tag for file download */}
-        <a href="/Dev_Patel_Resume.pdf" download>
+        {/* The href points directly to the public folder */}
+        <a
+          href="dev-portfolio\public\Dev_Patel_Resume.pdf"
+          download="Dev_Patel_Resume.pdf"
+        >
           <Button
             size="lg"
             variant="outline"
