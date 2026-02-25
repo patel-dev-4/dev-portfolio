@@ -12,19 +12,28 @@ import {
 // Placeholder data - you will update this with your actual projects later!
 const projects = [
   {
-    title: "E-Commerce Platform",
-    description: "A full-stack shopping experience with Next.js and Stripe.",
-    tech: "Next.js • TypeScript • Tailwind",
+    title: "MSME Financial Management System",
+    description:
+      "Built during my SSBI Group internship to configure complex loan parameters, interest rates, and repayment tenures.",
+    tech: "React • TypeScript • TanStack Query • ShadcnUI",
   },
   {
-    title: "AI SaaS Dashboard",
-    description: "Data visualization and AI-driven insights interface.",
-    tech: "React • Recharts • OpenAI API",
+    title: "Real-Time Web App Architecture",
+    description:
+      "A project developed at Amnex Infotechnologies involving backend workflows, API integrations, and database modeling.",
+    tech: "Python • Django • JavaScript • APIs",
   },
   {
-    title: "Real-time Chat App",
-    description: "Instant messaging using WebSockets and Redis.",
-    tech: "Node.js • Socket.io • PostgreSQL",
+    title: "Hanumant Car Enterprise Chatbot",
+    description:
+      "An auto-responsive, cloud-based chatbot deployment utilizing prompt engineering.",
+    tech: "IBM Watsonx.ai • Cloud Services",
+  },
+  {
+    title: "Advanced Scientific Calculator",
+    description:
+      "A desktop application implementing complex mathematical operations including trigonometry and exponentiation.",
+    tech: "Core Java • OOP Principles",
   },
 ];
 

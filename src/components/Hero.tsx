@@ -12,7 +12,7 @@ export default function Hero() {
         transition={{ duration: 0.5 }}
       >
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-          Hi, welcome to <span className="text-primary">Dev Portfolio</span>
+          Hi, I'm <span className="text-primary">Dev Patel</span>
         </h1>
       </motion.div>
 
@@ -21,9 +21,11 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <p className="text-xl text-muted-foreground max-w-[600px] mb-8 mx-auto">
-          I build high-performance, exclusive web experiences using React,
-          TypeScript, and modern backend technologies.
+        <p className="text-xl text-muted-foreground max-w-[700px] mb-8 mx-auto">
+          A recent Electronics & Communication Engineering graduate with a
+          strong foundation in Java and web development. I specialize in
+          building real-time applications using React, TypeScript, and modern
+          backend technologies.
         </p>
       </motion.div>
 
@@ -37,7 +39,7 @@ export default function Hero() {
           View My Work
         </Button>
         <Button size="lg" variant="outline" className="rounded-full px-8">
-          Chat with AI
+          Chat with My AI
         </Button>
       </motion.div>
     </section>
