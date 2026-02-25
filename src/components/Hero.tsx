@@ -73,10 +73,7 @@ export default function Hero() {
         </Button>
 
         {/* The href points directly to the public folder */}
-        <a
-          href="dev-portfolio\public\Dev_Patel_Resume.pdf"
-          download="Dev_Patel_Resume.pdf"
-        >
+        <a href="/Dev_Patel_Resume.pdf" download="Dev_Patel_Resume.pdf">
           <Button
             size="lg"
             variant="outline"
