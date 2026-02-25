@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useChat } from "@ai-sdk/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -16,10 +16,29 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MessageCircle, Send, X, Bot } from "lucide-react";
 
+/** Extract text content from a UIMessage's parts array */
+function getMessageText(parts: Array<{ type: string; text?: string }>): string {
+  return parts
+    .filter((p) => p.type === "text" && typeof p.text === "string")
+    .map((p) => p.text)
+    .join("");
+}
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat();
+  const [input, setInput] = useState("");
+
+  const { messages, sendMessage, status } = useChat();
+
+  const isLoading = status === "submitted" || status === "streaming";
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    const text = input;
+    setInput("");
+    await sendMessage({ text });
+  };
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -36,7 +55,7 @@ export default function Chatbot() {
                 <div className="flex items-center gap-2">
                   <Bot size={20} />
                   <CardTitle className="text-sm font-bold tracking-tight">
-                    Dev's AI Assistant
+                    Dev&apos;s AI Assistant
                   </CardTitle>
                 </div>
                 <Button
@@ -56,44 +75,42 @@ export default function Chatbot() {
                         <MessageCircle className="text-primary" size={24} />
                       </div>
                       <p className="text-sm font-medium">
-                        Hello! I'm Dev's AI.
+                        Hello! I&apos;m Dev&apos;s AI.
                       </p>
                       <p className="text-xs text-muted-foreground px-10">
-                        Ask me about Dev's experience at SSBI Group or his
+                        Ask me about Dev&apos;s experience at SSBI Group or his
                         projects like the MSME Financial System.
                       </p>
                     </div>
                   ) : (
                     <div className="flex flex-col gap-4">
-                      {messages.map(
-                        (m: { id: string; role: string; content: string }) => (
-                          <div
-                            key={m.id}
-                            className={`flex gap-2 ${m.role === "user" ? "flex-row-reverse" : ""}`}
-                          >
-                            <Avatar className="h-8 w-8 border">
-                              <AvatarFallback
-                                className={
-                                  m.role === "user"
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-muted"
-                                }
-                              >
-                                {m.role === "user" ? "U" : "AI"}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div
-                              className={`rounded-2xl px-3 py-2 max-w-[80%] text-sm shadow-sm ${
+                      {messages.map((m) => (
+                        <div
+                          key={m.id}
+                          className={`flex gap-2 ${m.role === "user" ? "flex-row-reverse" : ""}`}
+                        >
+                          <Avatar className="h-8 w-8 border">
+                            <AvatarFallback
+                              className={
                                 m.role === "user"
-                                  ? "bg-primary text-primary-foreground rounded-tr-none"
-                                  : "bg-muted rounded-tl-none border"
-                              }`}
+                                  ? "bg-primary text-primary-foreground"
+                                  : "bg-muted"
+                              }
                             >
-                              {m.content}
-                            </div>
+                              {m.role === "user" ? "U" : "AI"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div
+                            className={`rounded-2xl px-3 py-2 max-w-[80%] text-sm shadow-sm ${
+                              m.role === "user"
+                                ? "bg-primary text-primary-foreground rounded-tr-none"
+                                : "bg-muted rounded-tl-none border"
+                            }`}
+                          >
+                            {getMessageText(m.parts)}
                           </div>
-                        ),
-                      )}
+                        </div>
+                      ))}
                       {isLoading && (
                         <div className="flex gap-2">
                           <Avatar className="h-8 w-8 animate-pulse">
@@ -112,14 +129,14 @@ export default function Chatbot() {
                 <form onSubmit={handleSubmit} className="flex w-full gap-2">
                   <Input
                     value={input}
-                    onChange={handleInputChange}
+                    onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask me anything..."
                     className="flex-1 bg-background"
                   />
                   <Button
                     type="submit"
                     size="icon"
-                    disabled={isLoading || !input}
+                    disabled={isLoading || !input.trim()}
                   >
                     <Send size={18} />
                   </Button>
