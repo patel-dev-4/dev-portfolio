@@ -2,45 +2,85 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { ArrowRight, Download } from "lucide-react";
 
 export default function Hero() {
+  // Smooth scroll function for the "View My Work" button
+  const scrollToProjects = () => {
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <section className="flex flex-col items-center justify-center min-h-[85vh] text-center px-4">
+    <section className="relative flex flex-col items-center justify-center min-h-[90vh] text-center px-4">
+      {/* Premium glowing background effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
+
+      {/* Status Badge */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="mb-6"
+      >
+        <span className="px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm text-sm font-medium border border-border flex items-center gap-2 w-max mx-auto shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          Available for new opportunities
+        </span>
+      </motion.div>
+
+      {/* Headline with Gradient Text */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
       >
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
-          Hi, I'm <span className="text-primary">Dev Patel</span>
+          Hi, I'm{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500">
+            Dev Patel
+          </span>
         </h1>
       </motion.div>
 
+      {/* Elevated Pitch */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <p className="text-xl text-muted-foreground max-w-[700px] mb-8 mx-auto">
-          A recent Electronics & Communication Engineering graduate with a
-          strong foundation in Java and web development. I specialize in
-          building real-time applications using React, TypeScript, and modern
-          backend technologies.
+        <p className="text-xl text-muted-foreground max-w-[700px] mb-10 mx-auto leading-relaxed">
+          An Electronics & Communication Engineering graduate transitioning into
+          software development. I specialize in building real-time,
+          high-performance web applications using React, TypeScript, and robust
+          backend architectures.
         </p>
       </motion.div>
 
+      {/* Functional Buttons */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="flex flex-col sm:flex-row gap-4"
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
       >
-        <Button size="lg" className="rounded-full px-8">
-          View My Work
+        <Button
+          size="lg"
+          className="rounded-full px-8 gap-2 shadow-lg"
+          onClick={scrollToProjects}
+        >
+          View My Work <ArrowRight size={18} />
         </Button>
-        <Button size="lg" variant="outline" className="rounded-full px-8">
-          Chat with My AI
-        </Button>
+
+        {/* Using standard anchor tag for file download */}
+        <a href="/Dev_Patel_Resume.pdf" download>
+          <Button
+            size="lg"
+            variant="outline"
+            className="rounded-full px-8 gap-2 w-full sm:w-auto shadow-sm border-primary/20 hover:bg-primary/5"
+          >
+            <Download size={18} /> Download Resume
+          </Button>
+        </a>
       </motion.div>
     </section>
   );
