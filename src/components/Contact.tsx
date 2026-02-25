@@ -17,10 +17,12 @@ export default function Contact() {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
+    setErrorMsg("");
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
@@ -32,10 +34,17 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
       });
 
-      if (res.ok) setStatus("success");
-      else setStatus("error");
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrorMsg(json.error || "Something went wrong. Please try again.");
+      }
     } catch {
       setStatus("error");
+      setErrorMsg("Network error. Please check your connection and try again.");
     }
   }
 
@@ -113,9 +122,7 @@ export default function Contact() {
                   {status === "loading" ? "Sending..." : "Send Message"}
                 </Button>
                 {status === "error" && (
-                  <p className="text-red-500 text-sm text-center">
-                    Something went wrong. Please try again.
-                  </p>
+                  <p className="text-red-500 text-sm text-center">{errorMsg}</p>
                 )}
               </form>
             )}
