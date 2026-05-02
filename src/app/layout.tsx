@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+<<<<<<< HEAD
 import Chatbot from "@/components/Chatbot";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -22,6 +23,16 @@ export const metadata: Metadata = {
     description: "Building scalable web applications and enterprise systems with a focus on UI/UX and robust backends.",
     type: "website",
   }
+=======
+import Chatbot from "@/components/Chatbot"; 
+
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Dev Portfolio",
+  description:
+    "The exclusive development portfolio and interactive resume of Dev.",
+>>>>>>> d17808455001810d193735fa22286161634336f6
 };
 
 export default function RootLayout({
@@ -30,14 +41,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+<<<<<<< HEAD
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body className={`${inter.variable} font-sans bg-background text-foreground antialiased`}>
+=======
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+>>>>>>> d17808455001810d193735fa22286161634336f6
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+<<<<<<< HEAD
           <ScrollProgress />
           <div className="flex flex-col min-h-screen">
             <Navbar />
@@ -47,6 +64,11 @@ export default function RootLayout({
             <Footer />
           </div>
           <Chatbot />
+=======
+          {children}
+          <Chatbot />{" "}
+          {/* <-- 2. We place it here so it floats on the screen! */}
+>>>>>>> d17808455001810d193735fa22286161634336f6
         </ThemeProvider>
       </body>
     </html>
