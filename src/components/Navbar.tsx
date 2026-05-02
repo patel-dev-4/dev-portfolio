@@ -8,12 +8,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Expertise", href: "#expertise" },
-  { name: "Experience", href: "#experience" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/#home" },
+  { name: "About", href: "/#about" },
+  { name: "Expertise", href: "/#expertise" },
+  { name: "Experience", href: "/#experience" },
+  { name: "Projects", href: "/#projects" },
+  { name: "Playground", href: "/playground" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 const colorPresets = [
@@ -97,7 +98,7 @@ export default function Navbar() {
               : "bg-transparent"
           }`}
         >
-          <Link href="#home" className="flex items-center gap-4 group">
+          <Link href="/" className="flex items-center gap-4 group">
             <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-black border border-border shadow-lg group-hover:scale-110 transition-transform duration-500">
               <Image 
                 src={getActiveLogo()} 

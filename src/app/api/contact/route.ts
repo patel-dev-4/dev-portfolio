@@ -52,10 +52,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Nodemailer Error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to send email" },
+      { success: false, error: error instanceof Error ? error.message : "Failed to send email" },
       { status: 500 }
     );
   }
