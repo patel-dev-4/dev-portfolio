@@ -87,19 +87,19 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "py-3" : "py-6"
+        scrolled ? "py-4" : "py-6"
       }`}
     >
       <div className="container mx-auto px-4 md:px-12 flex justify-center">
         <div 
-          className={`flex items-center justify-between w-full max-w-7xl px-4 md:px-8 py-3 rounded-[2rem] transition-all duration-500 ${
+          className={`flex items-center justify-between w-full max-w-7xl px-4 md:px-8 py-3 rounded-[2.5rem] transition-all duration-500 border ${
             scrolled 
-              ? "bg-background/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] border border-border/50" 
-              : "bg-transparent border border-transparent"
+              ? "bg-background/70 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.15)] border-border/60" 
+              : "bg-background/20 backdrop-blur-lg border-white/10 shadow-lg"
           }`}
         >
           <Link href="/" className="flex items-center gap-3 md:gap-4 group">
-            <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-2xl overflow-hidden bg-black border border-border shadow-lg group-hover:scale-110 transition-transform duration-500">
+            <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-2xl overflow-hidden bg-zinc-950 border border-white/10 shadow-xl group-hover:scale-105 transition-transform duration-500">
               <Image 
                 src={getActiveLogo()} 
                 alt="Dev Patel Logo" 
@@ -110,26 +110,27 @@ export default function Navbar() {
               />
             </div>
             <div className="flex flex-col -space-y-1">
-              <span className="text-lg md:text-xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">Dev Patel</span>
+              <span className="text-lg md:text-xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80">Dev Patel</span>
               <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Software Developer</span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-6">
-            <div className="flex items-center gap-1 bg-secondary/20 backdrop-blur-md p-1.5 rounded-2xl border border-border/40">
+            <div className="flex items-center gap-1 bg-white/5 backdrop-blur-md p-1.5 rounded-2xl border border-white/5 shadow-inner">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-background hover:text-primary transition-all duration-300"
+                  className="px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-primary/10 hover:text-primary transition-all duration-300 relative group/item overflow-hidden"
                 >
-                  {link.name}
+                  <span className="relative z-10">{link.name}</span>
+                  <div className="absolute inset-0 bg-primary/0 group-hover/item:bg-primary/5 transition-colors" />
                 </Link>
               ))}
             </div>
             
-            <div className="flex items-center gap-2 p-1.5 bg-secondary/20 backdrop-blur-md rounded-2xl border border-border/40">
+            <div className="flex items-center gap-2 p-1.5 bg-white/5 backdrop-blur-md rounded-2xl border border-white/5 shadow-inner">
               <div className="relative" ref={paletteRef}>
                 <button
                   onClick={() => setIsPaletteOpen(!isPaletteOpen)}
@@ -210,16 +211,16 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Toggle */}
-          <div className="flex lg:hidden items-center gap-3">
+          <div className="flex lg:hidden items-center gap-2">
              <button
               onClick={() => setIsPaletteOpen(!isPaletteOpen)}
-              className={`p-2.5 rounded-xl transition-all shadow-sm ${isPaletteOpen ? "bg-primary text-white shadow-primary/20" : "bg-secondary/50 backdrop-blur-md"}`}
+              className={`p-3 rounded-2xl transition-all border ${isPaletteOpen ? "bg-primary text-white border-primary shadow-lg shadow-primary/20" : "bg-white/5 border-white/10 backdrop-blur-md"}`}
             >
               <Palette size={18} />
             </button>
             <button 
               onClick={() => setIsOpen(!isOpen)} 
-              className={`p-2.5 rounded-xl transition-all shadow-sm ${isOpen ? "bg-primary text-white shadow-primary/20" : "bg-secondary/50 backdrop-blur-md"}`}
+              className={`p-3 rounded-2xl transition-all border ${isOpen ? "bg-primary text-white border-primary shadow-lg shadow-primary/20" : "bg-white/5 border-white/10 backdrop-blur-md"}`}
             >
               {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -236,7 +237,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm lg:hidden z-[-1]"
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm lg:hidden z-[-1]"
             />
             <motion.div
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -244,17 +245,17 @@ export default function Navbar() {
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               className="lg:hidden container mx-auto px-4 mt-4"
             >
-              <div className="bg-background/95 backdrop-blur-2xl rounded-[2.5rem] border border-border shadow-2xl overflow-hidden p-6 flex flex-col gap-6">
-                <div className="flex items-center justify-between p-4 bg-secondary/30 rounded-3xl">
+              <div className="bg-background/90 backdrop-blur-3xl rounded-[3rem] border border-white/10 shadow-2xl overflow-hidden p-6 flex flex-col gap-6">
+                <div className="flex items-center justify-between p-5 bg-white/5 rounded-3xl border border-white/5">
                    <div className="flex flex-col">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Appearance</span>
-                      <span className="text-xs font-bold">{theme === "dark" ? "Dark Mode" : "Light Mode"}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-primary">Appearance</span>
+                      <span className="text-xs font-bold">{theme === "dark" ? "Deep Space" : "Daylight"}</span>
                    </div>
                    <button 
                       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                      className="p-3 rounded-2xl bg-background border border-border flex items-center gap-2 shadow-sm"
+                      className="w-12 h-12 rounded-2xl bg-background border border-white/10 flex items-center justify-center transition-all active:scale-95 shadow-sm"
                     >
-                      {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                      {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
                     </button>
                 </div>
 
@@ -264,7 +265,7 @@ export default function Navbar() {
                       key={p.theme}
                       onClick={() => changeColorTheme(p.theme)}
                       className={`flex items-center gap-3 p-4 rounded-2xl transition-all border ${
-                        activeColorTheme === p.theme ? "bg-primary/10 border-primary/30" : "bg-secondary/30 border-transparent"
+                        activeColorTheme === p.theme ? "bg-primary/10 border-primary/30" : "bg-white/5 border-white/5"
                       }`}
                     >
                       <div className={`w-5 h-5 rounded-lg ${p.color} shadow-sm`} />
