@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Briefcase, MapPin, CheckCircle2, Star, Rocket, Trophy } from "lucide-react";
+import { Briefcase, MapPin, Star, Rocket, Trophy } from "lucide-react";
 
 const experiences = [
   {

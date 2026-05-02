@@ -21,6 +21,11 @@ export const metadata: Metadata = {
     title: "Dev Patel | Full Stack Developer",
     description: "Building scalable web applications and enterprise systems with a focus on UI/UX and robust backends.",
     type: "website",
+  },
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   }
 };
 
