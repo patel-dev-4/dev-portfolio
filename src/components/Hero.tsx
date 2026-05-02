@@ -23,6 +23,7 @@ export default function Hero() {
     
     // Initial sync
     const initialClasses = document.documentElement.className;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (initialClasses.includes("theme-rose")) setActiveColorTheme("theme-rose");
     else if (initialClasses.includes("theme-gold")) setActiveColorTheme("theme-gold");
     else if (initialClasses.includes("theme-sapphire")) setActiveColorTheme("theme-sapphire");
