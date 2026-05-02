@@ -170,6 +170,16 @@ export default function SoundVisualizer() {
         crossOrigin="anonymous"
         onEnded={() => setIsPlaying(false)}
       />
+
+      {/* Explanation Section */}
+      <div className="w-full max-w-2xl bg-secondary/10 rounded-3xl p-8 border border-border mt-8">
+         <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary mb-3">What is Sound Visualization?</h4>
+         <p className="text-sm text-muted-foreground leading-relaxed">
+            Sound visualization translates audio data into dynamic visual patterns in real-time. This tool uses the <strong>Web Audio API</strong> to capture frequency data from the music. 
+            <br /><br />
+            The bars on the screen represent different audio frequencies—the left side shows the <strong>Bass</strong> (low frequencies), and the right side shows the <strong>Treble</strong> (high frequencies). When the music plays, the heights of the bars change based on the volume of each frequency, creating a &quot;spectrum&quot; of the sound.
+         </p>
+      </div>
     </div>
   );
 }

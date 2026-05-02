@@ -87,7 +87,7 @@ const KeyboardSimulator = dynamic(() => import("@/components/playground/Keyboard
 const PrecisionClick = dynamic(() => import("@/components/playground/PrecisionClick"), { ssr: false });
 const ReactionGame = dynamic(() => import("@/components/playground/ReactionGame"), { ssr: false });
 const SlidingPuzzle = dynamic(() => import("@/components/playground/SlidingPuzzle"), { ssr: false });
-const SoundVisualizer = dynamic(() => import("@/components/playground/SoundVisualizer"), { ssr: false });
+
 const SpeedSort = dynamic(() => import("@/components/playground/SpeedSort"), { ssr: false });
 const TapCombo = dynamic(() => import("@/components/playground/TapCombo"), { ssr: false });
 const TimePrediction = dynamic(() => import("@/components/playground/TimePrediction"), { ssr: false });
@@ -109,8 +109,8 @@ const items: PlaygroundItem[] = [
   { id: "sliding-puzzle", name: "Sliding Puzzle", description: "Classic 15-puzzle challenge. Sort the tiles in order.", icon: Grid3X3, category: "games", color: "from-cyan-500 to-blue-600", component: SlidingPuzzle },
   { id: "tap-combo", name: "Tap Combo", description: "Build your combo by tapping in sync with the rhythm.", icon: Activity, category: "games", color: "from-fuchsia-600 to-pink-500", component: TapCombo },
   { id: "aim-trainer", name: "Aim Trainer", description: "Precision clicking challenge. Hit random targets.", icon: TargetIcon, category: "games", color: "from-rose-500 to-red-600", component: AimTrainer },
-  { id: "sound-viz", name: "Sound Visualizer", description: "Interactive audio spectrum analysis and visualization.", icon: Activity, category: "games", color: "from-violet-600 to-fuchsia-500", component: SoundVisualizer },
-  { id: "keyboard-sim", name: "Keyboard Simulator", description: "A high-fidelity mechanical keyboard sound simulator.", icon: Keyboard, category: "games", color: "from-slate-500 to-slate-700", component: KeyboardSimulator },
+
+  { id: "keyboard-sim", name: "ASMR Keyboard", description: "A premium mechanical keyboard simulator with satisfying audio feedback.", icon: Keyboard, category: "games", color: "from-slate-500 to-slate-700", component: KeyboardSimulator },
 
   // Tools (The Core 10)
   { id: "dev-utils", name: "Developer Utilities", description: "JSON Formatter, Password Generator, and Color Palette tools.", icon: Wrench, category: "tools", color: "from-slate-600 to-slate-800", component: UtilityTools },
