@@ -35,9 +35,7 @@ export default function About() {
               <p>
                 As an <strong>Electronics & Communication Engineering</strong> graduate (Class of 2025), I bring a unique perspective to software development—blending hardware-level logic with high-level software architecture.
               </p>
-              <p>
-                My professional focus lies in building enterprise modules that are not just functional, but optimized for scale and human interaction. At <strong>SSBI Group</strong>, I&apos;ve lead the development of complex financial dashboards and workflow systems.
-              </p>
+                My professional focus lies in building enterprise modules that are not just functional, but optimized for scale and human interaction. At <strong>SSBI Group</strong>, I was promoted to <strong>Jr. Software Developer</strong> for my leadership in architecting complex financial dashboards and workflow systems.
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                 {["System Architecture", "UI/UX Optimization", "API Security", "Database Scaling"].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-sm font-bold text-foreground bg-secondary/50 p-4 rounded-2xl border border-border/50">

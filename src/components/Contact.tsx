@@ -1,6 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
 import { motion } from "framer-motion";
 import { Mail, Linkedin, Github, Send, Download, Phone, MapPin, Sparkles } from "lucide-react";
 import { useState } from "react";
@@ -12,17 +11,34 @@ export default function Contact() {
     phone: "",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setFormState({ name: "", email: "", phone: "", message: "" });
-    }, 1500);
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(formState),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        setStatus("success");
+        setFormState({ name: "", email: "", phone: "", message: "" });
+      } else {
+        setStatus("error");
+        setErrorMsg(json.error || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setStatus("error");
+      setErrorMsg("Network error. Please check your connection and try again.");
+    }
   };
 
   const contactInfo = [
@@ -99,7 +115,7 @@ export default function Contact() {
                 <Sparkles size={120} />
               </div>
 
-              {submitted ? (
+              {status === "success" ? (
                 <div className="py-20 flex flex-col items-center text-center">
                   <div className="w-24 h-24 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-8 animate-bounce">
                     <Send size={40} />
@@ -107,7 +123,7 @@ export default function Contact() {
                   <h4 className="text-4xl font-black mb-4 tracking-tight">Message Sent!</h4>
                   <p className="text-muted-foreground font-medium mb-10 text-lg">Thank you for reaching out. I&apos;ll get back to you within 24 hours.</p>
                   <button 
-                    onClick={() => setSubmitted(false)}
+                    onClick={() => setStatus("idle")}
                     className="px-10 py-4 bg-secondary rounded-2xl font-black hover:bg-primary hover:text-white transition-all shadow-xl"
                   >
                     Send Another
@@ -125,6 +141,7 @@ export default function Contact() {
                         className="w-full px-8 py-5 rounded-2xl bg-secondary/50 border border-border/50 focus:border-primary focus:bg-background focus:ring-4 focus:ring-primary/5 outline-none transition-all font-medium text-lg"
                         value={formState.name}
                         onChange={(e) => setFormState({...formState, name: e.target.value})}
+                        disabled={status === "loading"}
                       />
                     </div>
                     <div className="space-y-3">
@@ -136,6 +153,7 @@ export default function Contact() {
                         className="w-full px-8 py-5 rounded-2xl bg-secondary/50 border border-border/50 focus:border-primary focus:bg-background focus:ring-4 focus:ring-primary/5 outline-none transition-all font-medium text-lg"
                         value={formState.email}
                         onChange={(e) => setFormState({...formState, email: e.target.value})}
+                        disabled={status === "loading"}
                       />
                     </div>
                   </div>
@@ -148,15 +166,19 @@ export default function Contact() {
                       className="w-full px-8 py-5 rounded-2xl bg-secondary/50 border border-border/50 focus:border-primary focus:bg-background focus:ring-4 focus:ring-primary/5 outline-none transition-all font-medium text-lg resize-none"
                       value={formState.message}
                       onChange={(e) => setFormState({...formState, message: e.target.value})}
+                      disabled={status === "loading"}
                     />
                   </div>
                   <button 
-                    disabled={isSubmitting}
+                    disabled={status === "loading"}
                     type="submit"
                     className="w-full py-6 bg-primary text-white rounded-2xl font-black text-xl flex items-center justify-center gap-4 hover:bg-primary/90 transition-all hover:translate-y-[-4px] active:scale-95 shadow-2xl shadow-primary/30 disabled:opacity-70 group"
                   >
-                    {isSubmitting ? "Sending..." : <>Send Message <Send size={22} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" /></>}
+                    {status === "loading" ? "Sending..." : <>Send Message <Send size={22} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" /></>}
                   </button>
+                  {status === "error" && (
+                    <p className="text-red-500 text-sm text-center font-bold">{errorMsg}</p>
+                  )}
                 </form>
               )}
             </div>
@@ -165,137 +187,6 @@ export default function Contact() {
           </motion.div>
         </div>
       </div>
-=======
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-export default function Contact() {
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
-  const [errorMsg, setErrorMsg] = useState("");
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setStatus("loading");
-    setErrorMsg("");
-
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const json = await res.json();
-
-      if (res.ok && json.success) {
-        setStatus("success");
-      } else {
-        setStatus("error");
-        setErrorMsg(json.error || "Something went wrong. Please try again.");
-      }
-    } catch {
-      setStatus("error");
-      setErrorMsg("Network error. Please check your connection and try again.");
-    }
-  }
-
-  return (
-    <section className="py-20 px-4 md:px-8 max-w-3xl mx-auto flex justify-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="w-full"
-      >
-        <Card className="bg-card/50 backdrop-blur-sm shadow-xl border-primary/10">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">Let's Connect</CardTitle>
-            <CardDescription>
-              Looking for a developer? Send me a message and I'll get back to
-              you shortly.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {status === "success" ? (
-              <div className="text-center py-10 text-green-500 font-medium">
-                Message sent successfully! I'll be in touch soon.
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium">
-                      Name
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="John Doe"
-                      required
-                      disabled={status === "loading"}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium">
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="john@example.com"
-                      required
-                      disabled={status === "loading"}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium">
-                    Message
-                  </label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Tell me about your project..."
-                    rows={5}
-                    required
-                    disabled={status === "loading"}
-                    className="resize-none"
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  size="lg"
-                  disabled={status === "loading"}
-                >
-                  {status === "loading" ? "Sending..." : "Send Message"}
-                </Button>
-                {status === "error" && (
-                  <p className="text-red-500 text-sm text-center">{errorMsg}</p>
-                )}
-              </form>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
->>>>>>> d17808455001810d193735fa22286161634336f6
     </section>
   );
 }

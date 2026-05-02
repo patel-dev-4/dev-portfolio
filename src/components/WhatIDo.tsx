@@ -57,7 +57,7 @@ const services = [
 
 export default function WhatIDo() {
   return (
-    <section className="section-padding">
+    <section id="expertise" className="section-padding">
       <div className="container mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <h2 className="text-sm uppercase tracking-[0.3em] text-primary font-bold mb-4">Core Expertise</h2>

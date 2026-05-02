@@ -4,11 +4,7 @@ import { motion } from "framer-motion";
 import { 
   Palette, 
   MousePointer2, 
-  Search, 
-  Database,
-  CheckCircle2,
   Bug,
-  Zap,
   Terminal,
   Layers,
   Layout
