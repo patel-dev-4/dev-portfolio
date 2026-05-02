@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout, RotateCcw, Play, CheckCircle2 } from "lucide-react";
 
@@ -10,7 +10,7 @@ export default function SudokuLite() {
   const [initial, setInitial] = useState<boolean[]>(Array(16).fill(false));
   const [selected, setSelected] = useState<number | null>(null);
 
-  const solveSudoku = (board: (number | null)[]) => {
+  const solveSudoku = () => {
     // Very simple 4x4 solver/generator helper logic would go here
     // For "Lite" version, let's use a few hardcoded patterns for now
     const patterns = [
@@ -21,7 +21,7 @@ export default function SudokuLite() {
   };
 
   const generatePuzzle = () => {
-    const solution = solveSudoku(Array(16).fill(null));
+    const solution = solveSudoku();
     const newGrid: (number | null)[] = [...solution];
     const newInitial = Array(16).fill(false);
     

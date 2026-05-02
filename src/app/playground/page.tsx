@@ -8,14 +8,12 @@ import {
   Search, 
   ArrowLeft,
   Sparkles,
-  Gamepad,
   Terminal,
   Cpu,
   Zap,
   Code2,
   Key,
   Globe,
-  Database,
   Palette,
   FileCode,
   Layout,
@@ -47,10 +45,10 @@ interface PlaygroundItem {
   id: string;
   name: string;
   description: string;
-  icon: any;
+  icon: React.ElementType;
   category: Category;
   color: string;
-  component: any;
+  component: React.ComponentType;
 }
 
 // Lazy Load Components
@@ -139,7 +137,7 @@ const items: PlaygroundItem[] = [
 ];
 
 // Helper for Lucide icons that are missing in the import
-function TargetIcon(props: any) {
+function TargetIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -160,7 +158,7 @@ function TargetIcon(props: any) {
   );
 }
 
-function Shapes(props: any) {
+function Shapes(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -406,7 +404,7 @@ export default function PlaygroundPage() {
 interface TabButtonProps {
   active: boolean;
   onClick: () => void;
-  icon: any;
+  icon: React.ElementType;
   label: string;
 }
 

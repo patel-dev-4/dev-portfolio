@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Zap, Play, RotateCcw, AlertCircle, CheckCircle2 } from "lucide-react";
+
+const colors = ["emerald-500", "blue-500", "rose-500", "amber-500"];
+const colorNames = ["GREEN", "BLUE", "RED", "YELLOW"];
 
 export default function DualTaskChallenge() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "ended">("idle");
@@ -12,9 +15,6 @@ export default function DualTaskChallenge() {
   const [leftWord, setLeftWord] = useState("");
   const [rightEquation, setRightEquation] = useState({ q: "", a: 0 });
   const [rightOptions, setRightOptions] = useState<number[]>([]);
-
-  const colors = ["emerald-500", "blue-500", "rose-500", "amber-500"];
-  const colorNames = ["GREEN", "BLUE", "RED", "YELLOW"];
 
   const generateLeft = useCallback(() => {
     const wordIdx = Math.floor(Math.random() * colorNames.length);

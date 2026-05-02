@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileCode, RefreshCw, Copy, Check, AlertCircle, Upload } from "lucide-react";
+import { FileCode, Copy, Check, AlertCircle, Upload } from "lucide-react";
 
 export default function Base64Tool() {
   const [input, setInput] = useState("");
@@ -26,8 +26,8 @@ export default function Base64Tool() {
         setOutput(atob(val));
       }
       setError(null);
-    } catch (e: any) {
-      setError(currentMode === "decode" ? "Invalid Base64 string" : e.message);
+    } catch (e: unknown) {
+      setError(currentMode === "decode" ? "Invalid Base64 string" : (e instanceof Error ? e.message : "Error"));
       setOutput("");
     }
   };

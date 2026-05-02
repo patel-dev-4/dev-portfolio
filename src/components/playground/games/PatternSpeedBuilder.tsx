@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Zap, RotateCcw, Play, CheckCircle2 } from "lucide-react";
+import { Sparkles, Zap, RotateCcw } from "lucide-react";
 
 export default function PatternSpeedBuilder() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "ended">("idle");
@@ -11,13 +11,6 @@ export default function PatternSpeedBuilder() {
   const [isShowing, setIsShowing] = useState(false);
   const [score, setScore] = useState(0);
   const [activeBtn, setActiveBtn] = useState<number | null>(null);
-
-  const generateNext = useCallback((currentPattern: number[]) => {
-    const next = [...currentPattern, Math.floor(Math.random() * 4)];
-    setPattern(next);
-    setUserInput([]);
-    showPattern(next);
-  }, []);
 
   const showPattern = async (p: number[]) => {
     setIsShowing(true);
@@ -29,6 +22,13 @@ export default function PatternSpeedBuilder() {
     }
     setIsShowing(false);
   };
+
+  const generateNext = useCallback((currentPattern: number[]) => {
+    const next = [...currentPattern, Math.floor(Math.random() * 4)];
+    setPattern(next);
+    setUserInput([]);
+    showPattern(next);
+  }, []);
 
   const startGame = () => {
     setGameState("playing");

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cpu, Zap, RotateCcw, CheckCircle2, Play } from "lucide-react";
+import { Cpu, Zap, RotateCcw, CheckCircle2 } from "lucide-react";
 
 type GateType = "AND" | "OR" | "XOR";
 
@@ -17,7 +17,6 @@ export default function LogicCircuitBuilder() {
   const [currentPuzzle, setCurrentPuzzle] = useState(0);
   const [userInputs, setUserInputs] = useState<boolean[]>([false, false, false]);
   const [userGates, setUserGates] = useState<GateType[]>(["AND", "AND"]);
-  const [output, setOutput] = useState(false);
   const [level, setLevel] = useState(1);
 
   const puzzles: Puzzle[] = [
@@ -38,9 +37,7 @@ export default function LogicCircuitBuilder() {
     return result;
   };
 
-  useEffect(() => {
-    setOutput(calculate(userInputs, userGates));
-  }, [userInputs, userGates]);
+  const output = calculate(userInputs, userGates);
 
   const toggleInput = (idx: number) => {
     const next = [...userInputs];
@@ -60,9 +57,6 @@ export default function LogicCircuitBuilder() {
     if (output === puzzles[currentPuzzle].target) {
       if (level < 10) {
         setLevel(l => l + 1);
-        // Generate new random puzzle
-        const newInputs = [Math.random() > 0.5, Math.random() > 0.5, Math.random() > 0.5];
-        const newTarget = Math.random() > 0.5;
         setCurrentPuzzle(p => (p + 1) % puzzles.length);
         // In a real game, I'd generate a solvable one. For now let's just cycle.
       } else {

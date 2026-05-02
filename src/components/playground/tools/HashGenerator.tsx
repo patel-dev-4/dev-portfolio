@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Hash, Copy, Check, RefreshCw } from "lucide-react";
+import { Hash, Copy, Check } from "lucide-react";
 
 type HashAlgo = "MD5" | "SHA-1" | "SHA-256" | "SHA-512";
 
@@ -11,30 +10,33 @@ export default function HashGenerator() {
   const [hashes, setHashes] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState<string | null>(null);
 
-  const generateHashes = async (text: string) => {
-    if (!text) {
-      setHashes({});
-      return;
-    }
-
-    const algos: HashAlgo[] = ["SHA-1", "SHA-256", "SHA-512"];
-    const newHashes: Record<string, string> = {};
-
-    for (const algo of algos) {
-      const msgUint8 = new TextEncoder().encode(text);
-      const hashBuffer = await crypto.subtle.digest(algo, msgUint8);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      newHashes[algo] = hashHex;
-    }
-
-    // MD5 (Note: Not in Web Crypto, but I'll skip for now or use a simple mock if needed, 
-    // actually let's stick to SHA family for security/native support)
-    setHashes(newHashes);
-  };
-
   useEffect(() => {
-    generateHashes(input);
+    let isMounted = true;
+    
+    const run = async () => {
+      if (!input) {
+        setHashes({});
+        return;
+      }
+
+      const algos: HashAlgo[] = ["SHA-1", "SHA-256", "SHA-512"];
+      const newHashes: Record<string, string> = {};
+
+      for (const algo of algos) {
+        const msgUint8 = new TextEncoder().encode(input);
+        const hashBuffer = await crypto.subtle.digest(algo, msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        newHashes[algo] = hashHex;
+      }
+
+      if (isMounted) {
+        setHashes(newHashes);
+      }
+    };
+
+    run();
+    return () => { isMounted = false; };
   }, [input]);
 
   const handleCopy = (text: string, type: string) => {

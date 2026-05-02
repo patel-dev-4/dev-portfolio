@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, RotateCcw, Play, AlertTriangle } from "lucide-react";
+import { Zap, RotateCcw, AlertTriangle } from "lucide-react";
 
 export default function GravityFlipRunner() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameState, setGameState] = useState<"idle" | "playing" | "ended">("idle");
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const scoreRef = useRef(score);
+  useEffect(() => { scoreRef.current = score; }, [score]);
 
   const playerRef = useRef({
     y: 0,
@@ -66,7 +68,7 @@ export default function GravityFlipRunner() {
 
       // Spawn Obstacles
       obstacleTimer++;
-      if (obstacleTimer > Math.max(30, 80 - (score / 100))) {
+      if (obstacleTimer > Math.max(30, 80 - (scoreRef.current / 100))) {
         const isTop = Math.random() > 0.5;
         obstaclesRef.current.push({
           x: canvas.width,
@@ -79,7 +81,7 @@ export default function GravityFlipRunner() {
 
       // Update & Draw Obstacles
       obstaclesRef.current = obstaclesRef.current.filter(obs => {
-        obs.x -= 5 + (score / 500);
+        obs.x -= 5 + (scoreRef.current / 500);
 
         ctx.fillStyle = "#f43f5e";
         ctx.fillRect(obs.x, obs.y - (obs.y === 50 ? 0 : obs.height), obs.width, obs.height);
@@ -101,17 +103,23 @@ export default function GravityFlipRunner() {
         return obs.x > -50;
       });
 
-      setScore(s => s + 1);
+      setScore(s => {
+        const next = s + 1;
+        return next;
+      });
       animationFrame = requestAnimationFrame(update);
     };
 
     update();
     return () => cancelAnimationFrame(animationFrame);
-  }, [gameState, score]);
+  }, [gameState]);
 
   useEffect(() => {
-    if (score > highScore) setHighScore(score);
-  }, [score, highScore]);
+    if (gameState === "ended" && score > highScore) {
+      const timer = setTimeout(() => setHighScore(score), 0);
+      return () => clearTimeout(timer);
+    }
+  }, [gameState, score, highScore]);
 
   return (
     <div className="flex flex-col gap-8 h-full items-center">

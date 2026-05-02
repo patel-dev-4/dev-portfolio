@@ -1,26 +1,24 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Table, AlertCircle, Trash2, Check, Copy } from "lucide-react";
 
 export default function JsonToTable() {
   const [jsonInput, setJsonInput] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-
-  const parsedData = useMemo(() => {
-    if (!jsonInput) {
-      setError(null);
-      return null;
-    }
+  const { parsedData, parseError } = useMemo(() => {
+    if (!jsonInput) return { parsedData: null, parseError: null };
     try {
       const parsed = JSON.parse(jsonInput);
-      setError(null);
-      return Array.isArray(parsed) ? parsed : [parsed];
-    } catch (e: any) {
-      setError("Invalid JSON format. Please provide an array or object.");
-      return null;
+      return { 
+        parsedData: (Array.isArray(parsed) ? parsed : [parsed]) as Record<string, unknown>[], 
+        parseError: null 
+      };
+    } catch {
+      return { 
+        parsedData: null, 
+        parseError: "Invalid JSON format. Please provide an array or object." 
+      };
     }
   }, [jsonInput]);
 
@@ -34,6 +32,8 @@ export default function JsonToTable() {
     });
     return Array.from(allKeys);
   }, [parsedData]);
+
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(jsonInput);
@@ -60,13 +60,13 @@ export default function JsonToTable() {
             placeholder='[ { "id": 1, "name": "User 1" }, { "id": 2, "name": "User 2" } ]'
             className="flex-1 w-full bg-secondary/30 rounded-[2rem] p-8 font-mono text-sm border border-border focus:border-primary/50 focus:outline-none resize-none transition-all"
           />
-          {error && (
+          {parseError && (
             <motion.div 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-2 text-rose-500 text-xs font-bold uppercase"
             >
-              <AlertCircle size={14} /> {error}
+              <AlertCircle size={14} /> {parseError}
             </motion.div>
           )}
         </div>

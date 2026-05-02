@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shapes, Zap, RotateCcw, Play, CheckCircle2 } from "lucide-react";
+import { Shapes, RotateCcw, CheckCircle2 } from "lucide-react";
 
 export default function AngleMatchingGame() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "ended">("idle");

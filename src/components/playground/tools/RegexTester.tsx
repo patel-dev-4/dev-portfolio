@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Search, Info, Check, AlertCircle } from "lucide-react";
 
@@ -8,15 +8,8 @@ export default function RegexTester() {
   const [regex, setRegex] = useState("");
   const [flags, setFlags] = useState("g");
   const [testString, setTestString] = useState("");
-  const [matches, setMatches] = useState<RegExpMatchArray[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!regex) {
-      setMatches([]);
-      setError(null);
-      return;
-    }
+  const { matches, error } = useMemo(() => {
+    if (!regex) return { matches: [], error: null };
 
     try {
       const re = new RegExp(regex, flags);
@@ -24,6 +17,7 @@ export default function RegexTester() {
       let match;
 
       if (flags.includes("g")) {
+        // Create a copy to not modify original string if needed, though re.exec uses string
         while ((match = re.exec(testString)) !== null) {
           allMatches.push(match);
           if (match.index === re.lastIndex) re.lastIndex++; // Prevent infinite loop for zero-width matches
@@ -33,11 +27,12 @@ export default function RegexTester() {
         if (match) allMatches.push(match);
       }
 
-      setMatches(allMatches);
-      setError(null);
-    } catch (e: any) {
-      setError(e.message);
-      setMatches([]);
+      return { matches: allMatches, error: null };
+    } catch (e: unknown) {
+      return { 
+        matches: [], 
+        error: e instanceof Error ? e.message : "Invalid regular expression" 
+      };
     }
   }, [regex, flags, testString]);
 
@@ -126,12 +121,12 @@ export default function RegexTester() {
               {matches.map((match, i) => (
                 <div key={i} className="flex flex-col gap-1 border-l-2 border-primary/30 pl-4 py-1">
                   <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Match {i + 1}</span>
-                  <code className="text-emerald-400 text-sm">"{match[0]}"</code>
+                  <code className="text-emerald-400 text-sm">&quot;{match[0]}&quot;</code>
                   {match.length > 1 && (
                     <div className="flex flex-wrap gap-2 mt-1">
                       {Array.from(match).slice(1).map((group, j) => (
                         <span key={j} className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
-                          Group {j + 1}: "{group}"
+                          Group {j + 1}: &quot;{group}&quot;
                         </span>
                       ))}
                     </div>

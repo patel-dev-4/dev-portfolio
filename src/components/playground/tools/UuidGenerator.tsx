@@ -1,22 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
+import { motion } from "framer-motion";
 import { Fingerprint, RefreshCw, Copy, Check, Plus, Minus } from "lucide-react";
 
 export default function UuidGenerator() {
   const [count, setCount] = useState(5);
-  const [uuids, setUuids] = useState<string[]>([]);
+  const [uuids, setUuids] = useState<string[]>(() => 
+    Array.from({ length: 5 }, () => crypto.randomUUID())
+  );
   const [copied, setCopied] = useState<number | "all" | null>(null);
 
-  const generate = () => {
+  const generate = useCallback(() => {
     const newUuids = Array.from({ length: count }, () => crypto.randomUUID());
     setUuids(newUuids);
-  };
+  }, [count]);
 
   useEffect(() => {
-    generate();
-  }, [count]);
+    const timer = setTimeout(generate, 0);
+    return () => clearTimeout(timer);
+  }, [generate]);
 
   const handleCopy = (text: string, index: number | "all") => {
     navigator.clipboard.writeText(text);

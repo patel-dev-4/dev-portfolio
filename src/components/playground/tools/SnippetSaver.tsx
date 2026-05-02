@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Save, Trash2, Plus, Code2, Copy, Check, Search, Terminal } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Trash2, Plus, Code2, Copy, Check, Search, Terminal } from "lucide-react";
 
 interface Snippet {
   id: string;
@@ -13,15 +13,22 @@ interface Snippet {
 }
 
 export default function SnippetSaver() {
-  const [snippets, setSnippets] = useState<Snippet[]>([]);
+  const [snippets, setSnippets] = useState<Snippet[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("pg_snippets");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error("Failed to parse saved snippets", e);
+        }
+      }
+    }
+    return [];
+  });
   const [activeSnippet, setActiveSnippet] = useState<Snippet | null>(null);
   const [search, setSearch] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("pg_snippets");
-    if (saved) setSnippets(JSON.parse(saved));
-  }, []);
 
   const saveToStorage = (updated: Snippet[]) => {
     localStorage.setItem("pg_snippets", JSON.stringify(updated));

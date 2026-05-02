@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, Send, Plus, Trash2, Check, AlertCircle } from "lucide-react";
+import { Globe, Send, Plus, Trash2, AlertCircle } from "lucide-react";
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -13,7 +13,12 @@ export default function ApiRequestBuilder() {
     { key: "Content-Type", value: "application/json" }
   ]);
   const [body, setBody] = useState("");
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<{
+    status: number;
+    statusText: string;
+    data: unknown;
+    headers: Record<string, string>;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,8 +58,8 @@ export default function ApiRequestBuilder() {
         data,
         headers: Object.fromEntries(res.headers.entries()),
       });
-    } catch (e: any) {
-      setError(e.message || "Failed to send request");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to send request");
     } finally {
       setLoading(false);
     }

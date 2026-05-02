@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, RotateCcw, Target as TargetIcon, Zap } from "lucide-react";
+import { RotateCcw, Target as TargetIcon, Zap } from "lucide-react";
 
 export default function TrajectoryShooter() {
   const canvasRef = useRef<HTMLCanvasElement>(null);

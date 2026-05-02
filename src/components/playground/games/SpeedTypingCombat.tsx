@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal, Sword, Heart, RotateCcw, Play } from "lucide-react";
+import { Terminal, Sword, Heart, RotateCcw } from "lucide-react";
 
 interface Enemy {
   id: string;
@@ -25,7 +25,9 @@ export default function SpeedTypingCombat() {
   const [health, setHealth] = useState(5);
   const [input, setInput] = useState("");
   const [enemies, setEnemies] = useState<Enemy[]>([]);
-  const gameLoopRef = useRef<number>();
+  const gameLoopRef = useRef<number | undefined>(undefined);
+  const scoreRef = useRef(score);
+  useEffect(() => { scoreRef.current = score; }, [score]);
 
   const spawnEnemy = useCallback(() => {
     const word = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -34,17 +36,17 @@ export default function SpeedTypingCombat() {
       word,
       x: Math.random() * 80 + 10, // 10% to 90%
       y: -50,
-      speed: 1 + Math.random() * 1.5 + (score / 1000),
+      speed: 1 + Math.random() * 1.5 + (scoreRef.current / 1000),
     };
     setEnemies(prev => [...prev, newEnemy]);
-  }, [score]);
+  }, []);
 
   useEffect(() => {
     if (gameState !== "playing") return;
 
     let lastSpawn = 0;
     const loop = (time: number) => {
-      if (time - lastSpawn > Math.max(1000, 2500 - (score / 2))) {
+      if (time - lastSpawn > Math.max(1000, 2500 - (scoreRef.current / 2))) {
         spawnEnemy();
         lastSpawn = time;
       }
@@ -67,7 +69,7 @@ export default function SpeedTypingCombat() {
 
     gameLoopRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(gameLoopRef.current!);
-  }, [gameState, spawnEnemy, score]);
+  }, [gameState, spawnEnemy]);
 
   const handleInput = (val: string) => {
     setInput(val);

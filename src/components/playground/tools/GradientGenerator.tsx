@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Palette, RefreshCw, Copy, Check, ArrowRight } from "lucide-react";
+import { RefreshCw, Copy, Check, ArrowRight } from "lucide-react";
 
 export default function GradientGenerator() {
   const [color1, setColor1] = useState("#10b981");

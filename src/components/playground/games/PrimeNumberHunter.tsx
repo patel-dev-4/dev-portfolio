@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calculator, Zap, RotateCcw, Play, CheckCircle2, XCircle } from "lucide-react";
+import { RotateCcw, Play, CheckCircle2 } from "lucide-react";
 
 export default function PrimeNumberHunter() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "ended">("idle");

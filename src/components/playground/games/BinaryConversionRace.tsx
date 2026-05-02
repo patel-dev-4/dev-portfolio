@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Code2, Zap, RotateCcw, Play, CheckCircle2, AlertCircle } from "lucide-react";
+import { RotateCcw, Play, CheckCircle2 } from "lucide-react";
 
 export default function BinaryConversionRace() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "ended">("idle");
