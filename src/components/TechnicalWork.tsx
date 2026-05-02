@@ -98,7 +98,7 @@ export default function TechnicalWork() {
         >
           <div className="max-w-3xl mx-auto">
             <h4 className="text-2xl font-bold mb-6 italic">&quot;I focus on building scalable, user-friendly, and production-ready applications with strong attention to UI/UX, validation, role-based access, and business logic.&quot;</h4>
-            <p className="text-zinc-500 uppercase tracking-widest text-sm font-bold">— Resume Summary</p>
+            <p className="text-zinc-500 uppercase tracking-widest text-sm font-bold"></p>
           </div>
         </motion.div>
       </div>

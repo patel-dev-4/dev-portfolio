@@ -126,8 +126,7 @@ export default function Footer() {
             © {currentYear} Dev Patel. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            Built with <span className="text-red-500">♥</span> using React,
-            Next.js & Tailwind CSS.
+
           </p>
         </div>
       </div>
