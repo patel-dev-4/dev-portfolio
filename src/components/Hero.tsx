@@ -63,7 +63,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden"
+      className="relative min-h-screen flex items-center pt-24 md:pt-32 pb-16 md:pb-20 overflow-hidden"
     >
       {/* Dynamic Background */}
       <div className="absolute inset-0 -z-10">
@@ -71,20 +71,20 @@ export default function Hero() {
         <div className="absolute bottom-[5%] left-[5%] w-[40vw] h-[40vw] bg-accent/10 rounded-full blur-[100px]" />
         
         {/* Morphing blob */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 dark:bg-primary/10 animate-morph opacity-50 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-primary/5 dark:bg-primary/10 animate-morph opacity-50 blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 md:px-12">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
+        <div className="flex flex-col lg:flex-row items-center gap-12 md:gap-16">
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="flex-1 max-w-4xl"
+            className="flex-1 max-w-4xl text-center lg:text-left"
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-3 px-5 py-2 rounded-2xl bg-secondary/80 border border-border/50 text-primary text-xs font-black uppercase tracking-[0.2em] mb-10 shadow-sm backdrop-blur-sm"
+              className="inline-flex items-center gap-3 px-4 md:px-5 py-2 rounded-2xl bg-secondary/80 border border-border/50 text-primary text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-6 md:mb-10 shadow-sm backdrop-blur-sm"
             >
               <Sparkles size={16} />
               Full Stack Innovator
@@ -92,7 +92,7 @@ export default function Hero() {
 
             <motion.h1
               variants={itemVariants}
-              className="text-6xl md:text-9xl font-black tracking-tight mb-10 leading-[0.95] text-balance"
+              className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tight mb-8 md:mb-10 leading-[1] md:leading-[0.95] text-balance"
             >
               Design. <br />
               <span className="text-primary text-gradient">Develop.</span>{" "}
@@ -102,7 +102,7 @@ export default function Hero() {
 
             <motion.p
               variants={itemVariants}
-              className="text-xl md:text-3xl text-muted-foreground/80 mb-14 max-w-3xl leading-relaxed font-medium"
+              className="text-lg md:text-2xl lg:text-3xl text-muted-foreground/80 mb-10 md:mb-14 max-w-3xl mx-auto lg:mx-0 leading-relaxed font-medium"
             >
               I&apos;m{" "}
               <span className="text-foreground font-bold underline decoration-primary/30 decoration-4 underline-offset-8">
@@ -114,54 +114,54 @@ export default function Hero() {
 
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap items-center gap-6 mb-20"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-4 md:gap-6 mb-16 md:mb-20"
             >
               <Link
                 href="#projects"
-                className="group px-10 py-5 bg-primary text-white rounded-2xl font-black text-lg flex items-center gap-3 hover:bg-primary/90 transition-all hover:translate-y-[-4px] shadow-2xl shadow-primary/30 active:scale-95"
+                className="group px-8 md:px-10 py-4 md:py-5 bg-primary text-white rounded-2xl font-black text-base md:text-lg flex items-center gap-3 hover:bg-primary/90 transition-all hover:translate-y-[-4px] shadow-2xl shadow-primary/30 active:scale-95 w-full sm:w-auto justify-center"
               >
                 Explore My Work
                 <ArrowRight
-                  size={22}
+                  size={20}
                   className="group-hover:translate-x-2 transition-transform"
                 />
               </Link>
               <a
                 href="/resume.pdf"
                 target="_blank"
-                className="px-10 py-5 bg-background/50 backdrop-blur-md border-2 border-border/50 rounded-2xl font-black text-lg flex items-center gap-3 hover:bg-secondary transition-all hover:translate-y-[-4px] active:scale-95 shadow-lg"
+                className="px-8 md:px-10 py-4 md:py-5 bg-background/50 backdrop-blur-md border-2 border-border/50 rounded-2xl font-black text-base md:text-lg flex items-center gap-3 hover:bg-secondary transition-all hover:translate-y-[-4px] active:scale-95 shadow-lg w-full sm:w-auto justify-center"
               >
-                <Download size={22} /> Resume
+                <Download size={20} /> Resume
               </a>
             </motion.div>
 
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap items-center gap-12 pt-12 border-t border-border/50"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-8 md:gap-12 pt-10 md:pt-12 border-t border-border/50"
             >
-              <div className="flex flex-col">
-                <span className="text-4xl font-black text-foreground tracking-tighter">
+              <div className="flex flex-col items-center lg:items-start">
+                <span className="text-3xl md:text-4xl font-black text-foreground tracking-tighter">
                   1+
                 </span>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
+                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
                   Years Experience
                 </span>
               </div>
-              <div className="w-px h-10 bg-border/50 hidden sm:block" />
-              <div className="flex flex-col">
-                <span className="text-4xl font-black text-foreground tracking-tighter">
+              <div className="w-px h-8 md:h-10 bg-border/50 hidden sm:block" />
+              <div className="flex flex-col items-center lg:items-start">
+                <span className="text-3xl md:text-4xl font-black text-foreground tracking-tighter">
                   10+
                 </span>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
+                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
                   Successful Projects
                 </span>
               </div>
-              <div className="w-px h-10 bg-border/50 hidden sm:block" />
-              <div className="flex flex-col">
-                <span className="text-4xl font-black text-foreground tracking-tighter">
+              <div className="w-px h-8 md:h-10 bg-border/50 hidden sm:block" />
+              <div className="flex flex-col items-center lg:items-start">
+                <span className="text-3xl md:text-4xl font-black text-foreground tracking-tighter">
                   BFSI
                 </span>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
+                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
                   Specialization
                 </span>
               </div>

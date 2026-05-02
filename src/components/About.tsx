@@ -16,30 +16,30 @@ export default function About() {
       {/* Decorative dots background */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-[0.03] dark:opacity-[0.05] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] dark:bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]" />
 
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-24 items-center">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-6 md:mb-8">
               The Background
             </div>
-            <h3 className="text-5xl md:text-6xl font-black mb-10 leading-[1.1] tracking-tighter">
+            <h3 className="text-4xl md:text-6xl font-black mb-8 md:mb-10 leading-[1.1] tracking-tighter">
               Crafting Digital <br />
               <span className="text-primary text-gradient">Experiences</span> that Matter.
             </h3>
-            <div className="space-y-8 text-xl text-muted-foreground/90 leading-relaxed font-medium">
+            <div className="space-y-6 md:space-y-8 text-lg md:text-xl text-muted-foreground/90 leading-relaxed font-medium">
               <p>
                 As an <strong>Electronics & Communication Engineering</strong> graduate (Class of 2025), I bring a unique perspective to software development—blending hardware-level logic with high-level software architecture.
               </p>
                 My professional focus lies in building enterprise modules that are not just functional, but optimized for scale and human interaction. At <strong>SSBI Group</strong>, I was promoted to <strong>Jr. Software Developer</strong> for my leadership in architecting complex financial dashboards and workflow systems.
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 pt-4">
                 {["System Architecture", "UI/UX Optimization", "API Security", "Database Scaling"].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm font-bold text-foreground bg-secondary/50 p-4 rounded-2xl border border-border/50">
-                    <CheckCircle2 size={18} className="text-primary" />
+                  <li key={item} className="flex items-center gap-3 text-xs md:text-sm font-bold text-foreground bg-secondary/50 p-4 rounded-2xl border border-border/50">
+                    <CheckCircle2 size={16} className="text-primary" />
                     {item}
                   </li>
                 ))}
@@ -47,8 +47,8 @@ export default function About() {
             </div>
           </motion.div>
 
-          <div className="relative">
-            <div className="grid grid-cols-2 gap-6 relative z-10">
+          <div className="relative mt-12 lg:mt-0">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 relative z-10">
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
@@ -56,13 +56,13 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.8 }}
-                  className={`p-10 rounded-[2.5rem] glass-card hover-lift group ${index % 2 !== 0 ? "md:mt-10" : ""}`}
+                  className={`p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] glass-card hover-lift group ${index % 2 !== 0 ? "md:mt-10" : ""}`}
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-secondary flex items-center justify-center text-primary mb-4 md:mb-8 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
                     {stat.icon}
                   </div>
-                  <h4 className="text-xl font-black mb-2 tracking-tight">{stat.label}</h4>
-                  <p className="text-sm text-muted-foreground font-medium leading-relaxed">{stat.sub}</p>
+                  <h4 className="text-lg md:text-xl font-black mb-1 md:mb-2 tracking-tight">{stat.label}</h4>
+                  <p className="text-xs md:text-sm text-muted-foreground font-medium leading-relaxed">{stat.sub}</p>
                 </motion.div>
               ))}
             </div>
