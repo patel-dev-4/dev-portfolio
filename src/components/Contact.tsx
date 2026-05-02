@@ -158,6 +158,17 @@ export default function Contact() {
                     </div>
                   </div>
                   <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80 ml-1">Phone Number (Optional)</label>
+                    <input 
+                      type="tel" 
+                      placeholder="+91 00000 00000"
+                      className="w-full px-8 py-5 rounded-2xl bg-secondary/50 border border-border/50 focus:border-primary focus:bg-background focus:ring-4 focus:ring-primary/5 outline-none transition-all font-medium text-lg"
+                      value={formState.phone}
+                      onChange={(e) => setFormState({...formState, phone: e.target.value})}
+                      disabled={status === "loading"}
+                    />
+                  </div>
+                  <div className="space-y-3">
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80 ml-1">Message</label>
                     <textarea 
                       required

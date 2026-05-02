@@ -1,33 +1,62 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-// Make sure you update your .env.local with a NEW key!
 export async function POST(req: Request) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
   try {
-    const { name, email, message } = await req.json();
+    const body = await req.json();
+    const { name, email, phone, message } = body;
 
-    const data = await resend.emails.send({
-      from: "Portfolio Contact <onboarding@resend.dev>",
-      to: process.env.CONTACT_EMAIL as string, // This must be d.patel99979@gmail.com
-      subject: `New Message from ${name} on Dev Portfolio`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-    });
-
-    if (data.error) {
-      console.log("RESEND BLOCKED IT:", data.error.message);
+    // Validation
+    if (!name || !email || !message) {
       return NextResponse.json(
-        { success: false, error: data.error.message },
-        { status: 400 },
+        { success: false, error: "Missing required fields" },
+        { status: 400 }
       );
     }
 
-    return NextResponse.json({ success: true, data });
-  } catch (error) {
-    console.log("SERVER CRASHED:", error);
+    // Create transporter (Gmail Example)
+    // Note: For Gmail, you should use an "App Password" if 2FA is enabled
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Send email
+    await transporter.sendMail({
+      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+      to: process.env.CONTACT_EMAIL || process.env.EMAIL_USER,
+      replyTo: email,
+      subject: `New Message from ${name}`,
+      text: `
+        Name: ${name}
+        Email: ${email}
+        Phone: ${phone || "N/A"}
+        
+        Message:
+        ${message}
+      `,
+      html: `
+        <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+          <h2 style="color: #333;">New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phone || "N/A"}</p>
+          <hr style="border: 0; border-top: 1px solid #eee;" />
+          <p><strong>Message:</strong></p>
+          <p style="white-space: pre-wrap;">${message}</p>
+        </div>
+      `,
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Nodemailer Error:", error);
     return NextResponse.json(
-      { success: false, error: "Internal Server Error" },
-      { status: 500 },
+      { success: false, error: error.message || "Failed to send email" },
+      { status: 500 }
     );
   }
 }
