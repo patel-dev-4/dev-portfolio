@@ -59,6 +59,18 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeColorTheme, setActiveColorTheme] = useState("theme-emerald");
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const paletteRef = useRef<HTMLDivElement>(null);
 
@@ -124,30 +136,30 @@ export default function Navbar() {
     >
       <div className="container mx-auto px-3 md:px-12 flex justify-center">
         <div
-          className={`flex items-center justify-between w-full max-w-7xl px-6 md:px-10 py-3.5 rounded-full transition-all duration-700 border ${
+          className={`flex items-center justify-between w-full max-w-7xl px-4 md:px-10 py-2.5 rounded-full transition-all duration-700 border ${
             scrolled
               ? "glass-card shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border-white/10"
               : "bg-transparent border-transparent"
           }`}
         >
           <Link href="/" className="flex items-center gap-4 group">
-            <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl group-hover:scale-110 transition-all duration-700 group-hover:rotate-6">
+            <div className="relative w-12 h-10 rounded-lg overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl group-hover:scale-105 transition-all duration-700 group-hover:rotate-3">
               <Image
                 src={getActiveLogo()}
                 alt="Dev Patel Logo"
                 fill
-                className="object-contain p-2 scale-200"
+                className="object-contain p-1.5"
                 priority
                 unoptimized
               />
             </div>
             <div className="flex flex-col space-y-1">
-              <span className="text-xl md:text-2xl font-display font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
+              <span className="text-lg md:text-xl font-display font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
                 DEV PATEL
               </span>
-              <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] text-primary drop-shadow-sm">
+              {/* <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] text-primary drop-shadow-sm">
                 ARCHITECT & ENGINEER
-              </span>
+              </span> */}
             </div>
           </Link>
 
@@ -290,18 +302,12 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Toggle */}
-          <div className="flex lg:hidden items-center gap-3">
-            <button
-              onClick={() => setIsPaletteOpen(!isPaletteOpen)}
-              className={`p-4 rounded-2xl transition-all border ${isPaletteOpen ? "bg-primary text-white border-primary shadow-xl" : "bg-white/5 border-white/10 backdrop-blur-md"}`}
-            >
-              <Palette size={20} />
-            </button>
+          <div className="flex lg:hidden items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`p-4 rounded-2xl transition-all border ${isOpen ? "bg-primary text-white border-primary shadow-xl" : "bg-white/5 border-white/10 backdrop-blur-md"}`}
+              className={`p-3.5 rounded-2xl transition-all border ${isOpen ? "bg-primary text-white border-primary shadow-lg" : "bg-white/5 border-white/10 backdrop-blur-md"}`}
             >
-              {isOpen ? <X size={22} /> : <Menu size={22} />}
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
@@ -322,9 +328,9 @@ export default function Navbar() {
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 100 }}
-              className="lg:hidden fixed inset-y-0 right-0 w-full max-w-[320px] bg-background border-l border-white/10 z-[100] shadow-[-20px_0_50px_rgba(0,0,0,0.5)]"
+              className="lg:hidden fixed inset-y-0 right-0 w-full max-w-[320px] bg-background border-l border-white/10 z-[100] shadow-[-20px_0_50px_rgba(0,0,0,0.5)] flex flex-col"
             >
-              <div className="h-full flex flex-col p-8 pt-24 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto p-8 pt-24" data-lenis-prevent>
                 {/* Close Button Inside Drawer */}
                 <button
                   onClick={() => setIsOpen(false)}

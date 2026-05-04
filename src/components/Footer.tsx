@@ -7,25 +7,25 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-background border-t border-white/5 pt-32 pb-16 relative overflow-hidden">
+    <footer className="bg-background border-t border-white/5 pt-12 pb-6 relative overflow-hidden">
       {/* Background Architectural Text */}
-      <div className="absolute -bottom-20 -left-20 text-[30vw] font-black text-foreground/[0.02] select-none pointer-events-none leading-none tracking-tighter">
+      <div className="absolute -bottom-10 -left-10 text-[25vw] font-black text-foreground/[0.02] select-none pointer-events-none leading-none tracking-tighter">
         DEV
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-24 mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-16 mb-16">
           <div className="md:col-span-2">
             <Link
               href="#home"
-              className="text-4xl font-display font-black tracking-tighter flex items-center gap-3 mb-10 group"
+              className="text-2xl font-display font-black tracking-tighter flex items-center gap-3 mb-6 group"
             >
-              <span className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white text-xl shadow-lg shadow-primary/30 group-hover:rotate-12 transition-transform duration-500">
+              <span className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white text-lg shadow-lg shadow-primary/30 group-hover:rotate-12 transition-transform duration-500">
                 D
               </span>
               DEV PATEL.
             </Link>
-            <p className="text-muted-foreground/60 text-xl font-medium max-w-sm mb-12 leading-relaxed">
+            <p className="text-muted-foreground/60 text-lg font-medium max-w-sm mb-8 leading-relaxed">
               Architecting scalable enterprise ecosystems with a focus on 
               <span className="text-foreground italic font-bold"> high-fidelity</span> logic and 
               <span className="text-foreground italic font-bold"> premium</span> user experiences.

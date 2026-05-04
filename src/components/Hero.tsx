@@ -73,7 +73,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-start pt-24 md:pt-30 pb-12 md:pb-20 overflow-hidden"
+      className="relative min-h-[70vh] flex items-start pt-16 md:pt-24 pb-6 md:pb-10 overflow-hidden"
     >
       {/* Dynamic Background */}
       <div className="absolute inset-0 -z-10">
@@ -97,7 +97,7 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex flex-1 justify-center relative perspective-1000 lg:order-last mb-0 lg:-mt-80 lg:translate-x-12"
+            className="hidden lg:flex flex-1 justify-center relative perspective-1000 lg:order-last mb-0 lg:-mt-11 lg:translate-x-20"
           >
             <div className="relative w-[480px] h-[480px] group">
               {/* Complex Background Rings */}
@@ -116,7 +116,7 @@ export default function Hero() {
                     src={getLogoPath()}
                     alt="Dev Patel Professional Identity"
                     fill
-                    className="object-contain p-10 scale-125 transition-all duration-1000 group-hover:scale-110"
+                    className="object-contain p-10 scale-160 transition-all duration-1000 group-hover:scale-150"
                     priority
                     unoptimized
                   />
@@ -153,16 +153,16 @@ export default function Hero() {
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/20 border border-primary/40 text-primary text-[11px] md:text-sm font-black uppercase tracking-[0.4em] mb-8 md:mb-14 shadow-[0_10px_30px_-5px_rgba(var(--primary),0.2)] backdrop-blur-xl relative overflow-hidden group"
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/20 border border-primary/40 text-primary text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-6 md:mb-8 shadow-[0_10px_30px_-5px_rgba(var(--primary),0.2)] backdrop-blur-xl relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/10 translate-x-[-100%] animate-[shimmer_3s_infinite]" />
-              <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),1)]" />
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),1)]" />
               Next-Gen Full Stack Architect
             </motion.div>
 
             <motion.h1
               variants={itemVariants}
-              className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black tracking-tighter mb-4 md:mb-14 leading-[0.85] text-balance"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-4 md:mb-6 leading-[0.9] text-balance"
             >
               CRAFT.
               <br />
@@ -175,10 +175,10 @@ export default function Hero() {
 
             <motion.p
               variants={itemVariants}
-              className="text-lg md:text-2xl lg:text-3xl text-muted-foreground/90 mb-10 md:mb-16 max-w-3xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 lg:px-0"
+              className="text-sm md:text-lg lg:text-xl text-muted-foreground/90 mb-6 md:mb-10 max-w-3xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 lg:px-0"
             >
               I&apos;m{" "}
-              <span className="text-foreground font-bold italic underline decoration-primary/40 decoration-4 md:decoration-8 underline-offset-[8px] md:underline-offset-[12px]">
+              <span className="text-foreground font-bold italic underline decoration-primary/40 decoration-4 md:decoration-6 underline-offset-[4px] md:underline-offset-[8px]">
                 Dev Patel
               </span>
               . Engineering elite digital experiences through high-performance
@@ -187,53 +187,53 @@ export default function Hero() {
 
             <motion.div
               variants={itemVariants}
-              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 md:gap-8 mb-16 md:mb-24 px-4 sm:px-0"
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 md:gap-6 mb-12 md:mb-16 px-4 sm:px-0"
             >
               <Link
                 href="#projects"
-                className="group relative px-8 md:px-12 py-4 md:py-6 bg-primary text-white rounded-2xl font-black text-base md:text-xl flex items-center gap-4 hover:bg-primary/90 transition-all hover:translate-y-[-6px] shadow-[0_20px_40px_-15px_rgba(var(--primary),0.4)] active:scale-95 w-full sm:w-auto justify-center overflow-hidden"
+                className="group relative px-6 md:px-10 py-3 md:py-5 bg-primary text-white rounded-xl font-black text-sm md:text-lg flex items-center gap-4 hover:bg-primary/90 transition-all hover:translate-y-[-4px] shadow-[0_15px_30px_-12px_rgba(var(--primary),0.4)] active:scale-95 w-full sm:w-auto justify-center overflow-hidden"
               >
                 <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]" />
                 Explore Portfolio
                 <ArrowRight
-                  size={20}
+                  size={18}
                   className="group-hover:translate-x-2 transition-transform"
                 />
               </Link>
               <a
                 href="/resume.pdf"
                 target="_blank"
-                className="px-8 md:px-12 py-4 md:py-6 bg-background/40 backdrop-blur-xl border-2 border-primary/20 rounded-2xl font-black text-base md:text-xl flex items-center gap-4 hover:bg-secondary transition-all hover:translate-y-[-6px] active:scale-95 shadow-2xl w-full sm:w-auto justify-center"
+                className="px-6 md:px-10 py-3 md:py-5 bg-background/40 backdrop-blur-xl border-2 border-primary/20 rounded-xl font-black text-sm md:text-lg flex items-center gap-4 hover:bg-secondary transition-all hover:translate-y-[-4px] active:scale-95 shadow-2xl w-full sm:w-auto justify-center"
               >
-                <Download size={20} /> Resume
+                <Download size={18} /> Resume
               </a>
             </motion.div>
 
             <motion.div
               variants={itemVariants}
-              className="grid grid-cols-2 sm:grid-cols-3 gap-8 md:gap-16 pt-12 md:pt-16 border-t border-border/30"
+              className="grid grid-cols-2 sm:grid-cols-3 gap-6 md:gap-12 pt-8 md:pt-12 border-t border-border/30"
             >
               <div className="flex flex-col items-center lg:items-start group">
-                <span className="text-3xl md:text-5xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
+                <span className="text-2xl md:text-4xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
                   1+
                 </span>
-                <span className="text-[9px] md:text-[12px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
+                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
                   Years Exp
                 </span>
               </div>
               <div className="flex flex-col items-center lg:items-start group">
-                <span className="text-3xl md:text-5xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
+                <span className="text-2xl md:text-4xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
                   10+
                 </span>
-                <span className="text-[9px] md:text-[12px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
+                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
                   Global Projects
                 </span>
               </div>
               <div className="flex flex-col items-center lg:items-start group hidden sm:flex">
-                <span className="text-3xl md:text-5xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
+                <span className="text-2xl md:text-4xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
                   BFSI
                 </span>
-                <span className="text-[9px] md:text-[12px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
+                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
                   Domain
                 </span>
               </div>

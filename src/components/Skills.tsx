@@ -13,87 +13,84 @@ import {
 const skillCategories = [
   {
     title: "Frontend Tech",
-    icon: <Laptop size={24} />,
-    skills: ["React", "TypeScript", "JavaScript", "Tailwind CSS", "shadcn/ui", "TanStack Router", "TanStack Query", "React Hook Form", "Zod", "Framer Motion"],
+    icon: <Laptop size={20} />,
+    skills: ["React", "Next.js", "TypeScript", "Tailwind", "shadcn/ui", "TanStack", "Framer Motion", "Zod"],
   },
   {
     title: "Backend Core",
-    icon: <Server size={24} />,
-    skills: ["Java", "Spring Boot", "REST APIs", "Spring Security", "JPA/Hibernate", "Maven", "Node.js (basics)", "API Integration", "RBAC"],
+    icon: <Server size={20} />,
+    skills: ["Java", "Spring Boot", "REST APIs", "Spring Security", "JPA", "Node.js", "API Design", "RBAC"],
   },
   {
-    title: "Data Management",
-    icon: <Database size={24} />,
-    skills: ["MySQL", "PostgreSQL", "SQL Queries", "Schema Design", "Stored Procedures", "Report Queries", "Data Validation"],
+    title: "Data Systems",
+    icon: <Database size={20} />,
+    skills: ["MySQL", "PostgreSQL", "SQL", "Schema Design", "Procedures", "Report Queries", "Validation"],
   },
   {
-    title: "Professional Tools",
-    icon: <Wrench size={24} />,
-    skills: ["Git / GitHub", "Postman", "IntelliJ IDEA", "VS Code", "Docker", "Redis", "Coolify", "Caddy/Nginx", "MIS Reporting Tools"],
+    title: "Dev Tools",
+    icon: <Wrench size={20} />,
+    skills: ["Git", "Postman", "IntelliJ", "Docker", "Redis", "Coolify", "Caddy/Nginx", "MIS Tools"],
   },
   {
-    title: "Domain Knowledge",
-    icon: <ShieldCheck size={24} />,
-    skills: ["Banking Systems", "Loan Management (LMS)", "Early Warning (EWS)", "Fraud Risk Management", "Maker-Checker Flows", "Audit Trails", "SLA Tracking"],
+    title: "Domain Stack",
+    icon: <ShieldCheck size={20} />,
+    skills: ["Banking", "Loan Mgmt", "Fraud Risk", "Maker-Checker", "Audit", "SLA", "FinTech"],
   },
   {
-    title: "Engineering Base",
-    icon: <Code2 size={24} />,
-    skills: ["Core Java", "C#", "Python", "Electronics & Comm.", "Problem Solving", "Debugging Mindset", "Requirement Analysis"],
+    title: "Core Found.",
+    icon: <Code2 size={20} />,
+    skills: ["Java SE", "Python", "Problem Solving", "Debugging", "Electronics", "Req Analysis"],
   },
 ];
 
 export default function Skills() {
   return (
     <section id="skills" className="section-padding bg-background relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center max-w-4xl mx-auto mb-20 md:mb-32">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-12 md:mb-16">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-black uppercase tracking-[0.4em] mb-10 shadow-sm backdrop-blur-md"
+            className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] font-black uppercase tracking-[0.4em] mb-6 md:mb-8 shadow-sm backdrop-blur-md"
           >
-            Capabilities
+            Stack
           </motion.div>
-          <h3 className="text-5xl md:text-8xl font-display font-black mb-10 tracking-tighter leading-[0.85]">
+          <h3 className="text-2xl md:text-5xl font-display font-black mb-6 tracking-tighter leading-[0.9]">
             THE TECHNICAL <br /><span className="text-primary text-gradient">ECOSYSTEM.</span>
           </h3>
-          <p className="text-xl md:text-2xl text-muted-foreground/80 font-medium max-w-3xl mx-auto leading-relaxed">
+          <p className="text-[13px] md:text-base text-muted-foreground/80 font-medium max-w-2xl mx-auto leading-relaxed">
             A comprehensive architectural stack engineered for resilience, 
             scalability, and high-performance financial systems.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {skillCategories.map((category, categoryIndex) => (
             <motion.div
               key={categoryIndex}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: categoryIndex * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="p-10 md:p-14 rounded-4xl border border-white/10 bg-card/30 backdrop-blur-3xl hover:border-primary/40 transition-all duration-700 hover:shadow-2xl hover:shadow-primary/10 group flex flex-col h-full"
+              viewport={{ once: true }}
+              transition={{ delay: categoryIndex * 0.05 }}
+              className="p-6 md:p-8 rounded-2xl border border-white/5 bg-card/30 backdrop-blur-3xl hover:border-primary/40 transition-all duration-700 hover:shadow-xl group flex flex-col h-full"
             >
-              <div className="flex items-center gap-6 mb-10 md:mb-12">
+              <div className="flex items-center gap-4 mb-6">
                 <motion.div 
                   whileHover={{ rotate: 10, scale: 1.1 }}
-                  className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-secondary/80 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-700 shadow-xl"
+                  className="w-12 h-12 rounded-xl bg-secondary/80 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-700 shadow-md"
                 >
-                  <div className="scale-125">{category.icon}</div>
+                  <div className="scale-110">{category.icon}</div>
                 </motion.div>
-                <h4 className="text-2xl md:text-3xl font-display font-black tracking-tighter leading-tight">{category.title}</h4>
+                <h4 className="text-lg md:text-xl font-display font-black tracking-tighter leading-tight">{category.title}</h4>
               </div>
-              <div className="flex flex-wrap gap-3 mt-auto">
+              <div className="flex flex-wrap gap-1.5 mt-auto">
                 {category.skills.map((skill, skillIndex) => (
-                  <motion.span 
+                  <span 
                     key={skillIndex}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 + (skillIndex * 0.05) }}
-                    className="px-4 md:px-5 py-2 md:py-2.5 rounded-xl bg-background/40 text-foreground text-[10px] md:text-xs font-black uppercase tracking-widest border border-white/5 hover:border-primary/30 hover:bg-primary/5 transition-all cursor-default"
+                    className="px-3 py-1 rounded-lg bg-background/40 text-foreground text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-white/5 hover:border-primary/30 transition-all cursor-default"
                   >
                     {skill}
-                  </motion.span>
+                  </span>
                 ))}
               </div>
             </motion.div>

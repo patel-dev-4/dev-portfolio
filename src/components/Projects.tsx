@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowUpRight,
@@ -152,6 +152,18 @@ const projects: Project[] = [
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  // Lock body scroll when case study is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedProject]);
+
   return (
     <section
       id="projects"
@@ -162,13 +174,13 @@ export default function Projects() {
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 blur-[100px] rounded-full -ml-48 -mb-48" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-32 gap-12">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div className="max-w-4xl">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-black uppercase tracking-[0.4em] mb-10 shadow-sm backdrop-blur-md"
+              className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-6 shadow-sm backdrop-blur-md"
             >
               <div className="w-1.5 h-1.5 rounded-full bg-primary" />
               Engineering Excellence
@@ -178,7 +190,7 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-6xl md:text-9xl font-display font-black mb-10 leading-[0.85] tracking-tighter"
+              className="text-5xl md:text-7xl font-display font-black mb-6 leading-[0.9] tracking-tighter"
             >
               SELECTED <br />
               <span className="text-primary text-gradient">CASE STUDIES.</span>
@@ -188,7 +200,7 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl md:text-3xl text-muted-foreground/90 font-medium leading-relaxed max-w-2xl"
+              className="text-lg md:text-xl text-muted-foreground/90 font-medium leading-relaxed max-w-2xl"
             >
               Architecting high-performance systems for the BFSI sector, where
               <span className="text-foreground font-bold italic">
@@ -213,26 +225,26 @@ export default function Projects() {
                 ease: [0.16, 1, 0.3, 1],
               }}
               onClick={() => setSelectedProject(project)}
-              className="group relative flex flex-col h-full rounded-4xl border border-white/10 bg-card/40 backdrop-blur-3xl overflow-hidden cursor-pointer hover:border-primary/40 transition-all duration-700 shadow-2xl hover:shadow-primary/20"
+              className="group relative flex flex-col h-full rounded-3xl border border-white/10 bg-card/40 backdrop-blur-3xl overflow-hidden cursor-pointer hover:border-primary/40 transition-all duration-700 shadow-xl hover:shadow-primary/20"
             >
               {/* Card Background Overlay */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-1000`}
               />
 
-              <div className="relative p-10 md:p-20 flex flex-col h-full">
-                <div className="flex items-start justify-between mb-12 md:mb-20">
+              <div className="relative p-4 md:p-6 flex flex-col h-full">
+                <div className="flex items-start justify-between mb-6 md:mb-8">
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    className={`p-6 md:p-8 rounded-3xl ${project.color} text-white shadow-[0_20px_50px_-10px_rgba(0,0,0,0.3)] group-hover:shadow-primary/40 transition-all duration-700`}
+                    className={`p-3 rounded-xl ${project.color} text-white shadow-lg group-hover:shadow-primary/40 transition-all duration-700`}
                   >
-                    {project.icon}
+                    <div className="scale-75 md:scale-90">{project.icon}</div>
                   </motion.div>
-                  <div className="flex flex-wrap justify-end gap-3 max-w-[150px]">
+                  <div className="flex flex-wrap justify-end gap-1.5">
                     {project.tags.slice(0, 2).map((tag) => (
                       <span
                         key={tag}
-                        className="px-4 py-2 rounded-xl bg-secondary/80 text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] border border-white/5 backdrop-blur-md"
+                        className="px-2 py-1 rounded-md bg-secondary/80 text-[7px] md:text-[9px] font-black uppercase tracking-[0.2em] border border-white/5 backdrop-blur-md"
                       >
                         {tag}
                       </span>
@@ -241,27 +253,27 @@ export default function Projects() {
                 </div>
 
                 <div className="flex-grow">
-                  <h4 className="text-xs md:text-sm font-black text-primary uppercase tracking-[0.3em] mb-4 md:mb-5 drop-shadow-sm">
+                  <h4 className="text-[9px] md:text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-2 md:mb-3">
                     {project.subtitle}
                   </h4>
-                  <h3 className="text-3xl md:text-6xl font-display font-black mb-6 md:mb-8 tracking-tighter group-hover:text-primary transition-colors duration-500 leading-tight">
+                  <h3 className="text-xl md:text-3xl font-display font-black mb-3 md:mb-4 tracking-tighter group-hover:text-primary transition-colors duration-500 leading-tight">
                     {project.title}
                   </h3>
-                  <p className="text-lg md:text-xl text-muted-foreground font-medium leading-relaxed mb-10 md:mb-14">
+                  <p className="text-[12px] md:text-sm text-muted-foreground/80 font-medium leading-relaxed mb-6 md:mb-8">
                     {project.description}
                   </p>
                 </div>
 
-                <div className="mt-auto pt-10 md:pt-14 border-t border-white/5 flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-xs md:text-sm font-black text-foreground uppercase tracking-[0.3em]">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-700">
-                      <Code2 size={20} />
+                <div className="mt-auto pt-4 md:pt-6 border-t border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-[10px] md:text-xs font-black text-foreground uppercase tracking-[0.3em]">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-700">
+                      <Code2 size={16} />
                     </div>
                     Deep Dive
                   </div>
                   <motion.div
-                    whileHover={{ x: 10, scale: 1.1 }}
-                    className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-foreground text-background flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-700 -rotate-45 group-hover:rotate-0 shadow-2xl"
+                    whileHover={{ x: 5, scale: 1.1 }}
+                    className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-foreground text-background flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-700 -rotate-45 group-hover:rotate-0 shadow-xl"
                   >
                     <ArrowUpRight className="w-6 h-6 md:w-9 md:h-9" />
                   </motion.div>
@@ -271,8 +283,8 @@ export default function Projects() {
           ))}
         </div>
 
-        <div className="mt-24 md:mt-40 text-center">
-          <button className="group relative px-12 md:px-20 py-6 md:py-8 bg-foreground text-background rounded-full font-black text-xl md:text-2xl hover:bg-primary hover:text-white transition-all duration-700 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.5)] hover:translate-y-[-8px] active:scale-95 overflow-hidden">
+        <div className="mt-15 md:mt-20 text-center">
+          <button className="group relative px-10 md:px-20 py-3 md:py-3 bg-foreground text-background rounded-full font-black text-xl md:text-2xl hover:bg-primary hover:text-white transition-all duration-700 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.5)] hover:translate-y-[-8px] active:scale-95 overflow-hidden">
             <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-[-20deg]" />
             EXPLORE ARCHIVE
           </button>
@@ -295,7 +307,7 @@ export default function Projects() {
               initial={{ opacity: 0, scale: 0.9, y: 100, rotateX: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 100, rotateX: 20 }}
-              className="relative w-full max-w-7xl h-[95vh] bg-card/30 border border-white/10 rounded-4xl shadow-[0_100px_200px_-50px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col lg:flex-row perspective-1000"
+              className="relative w-full max-w-7xl h-full md:h-[95vh] bg-card/30 border border-white/10 rounded-4xl shadow-[0_100px_200px_-50px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col lg:flex-row perspective-1000"
             >
               {/* Close Button */}
               <button
@@ -308,9 +320,10 @@ export default function Projects() {
                 />
               </button>
 
-              {/* Sidebar Info */}
+               {/* Sidebar Info */}
               <div
-                className={`w-full lg:w-2/5 p-10 md:p-20 bg-gradient-to-br ${selectedProject.gradient} flex flex-col relative overflow-hidden`}
+                className={`w-full lg:w-2/5 p-8 md:p-14 bg-gradient-to-br ${selectedProject.gradient} flex flex-col relative overflow-y-auto lg:overflow-hidden`}
+                data-lenis-prevent
               >
                 <div className="absolute inset-0 noise opacity-[0.05] pointer-events-none" />
                 <div className="relative z-10 flex flex-col h-full">
@@ -318,35 +331,35 @@ export default function Projects() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3, type: "spring" }}
-                    className={`w-20 h-20 md:w-28 md:h-28 rounded-3xl ${selectedProject.color} text-white flex items-center justify-center mb-10 md:mb-14 shadow-[0_30px_60px_-10px_rgba(0,0,0,0.5)]`}
+                    className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl ${selectedProject.color} text-white flex items-center justify-center mb-8 md:mb-10 shadow-xl`}
                   >
                     {selectedProject.icon &&
                       (typeof selectedProject.icon === "object" ? (
-                        <div className="scale-150">{selectedProject.icon}</div>
+                        <div className="scale-125">{selectedProject.icon}</div>
                       ) : (
                         selectedProject.icon
                       ))}
                   </motion.div>
-                  <h4 className="text-[12px] font-black text-primary uppercase tracking-[0.4em] mb-4 md:mb-6">
+                  <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-3 md:mb-4">
                     {selectedProject.subtitle}
                   </h4>
-                  <h2 className="text-4xl md:text-7xl font-display font-black mb-8 md:mb-14 tracking-tighter leading-[0.9]">
+                  <h2 className="text-3xl md:text-5xl font-display font-black mb-6 md:mb-10 tracking-tighter leading-[0.95]">
                     {selectedProject.title}
                   </h2>
 
-                  <div className="mt-auto space-y-10">
+                  <div className="mt-auto space-y-8">
                     <div>
-                      <p className="text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 mb-6">
+                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 mb-4">
                         TECHNOLOGICAL FOUNDATION
                       </p>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-2">
                         {selectedProject.details.techStack.map((tech, idx) => (
                           <motion.span
                             key={tech}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.5 + idx * 0.05 }}
-                            className="px-5 py-2.5 rounded-xl bg-background/40 backdrop-blur-xl border border-white/5 text-[11px] font-black uppercase tracking-widest"
+                            className="px-4 py-2 rounded-lg bg-background/40 backdrop-blur-xl border border-white/5 text-[10px] font-black uppercase tracking-widest"
                           >
                             {tech}
                           </motion.span>
@@ -358,33 +371,36 @@ export default function Projects() {
               </div>
 
               {/* Main Content */}
-              <div className="flex-1 p-10 md:p-24 overflow-y-auto custom-scrollbar bg-card/10 relative">
+              <div 
+                className="flex-1 p-8 md:p-16 overflow-y-auto custom-scrollbar bg-card/10 relative"
+                data-lenis-prevent
+              >
                 <div className="max-w-4xl">
                   <motion.section
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="mb-16 md:mb-24"
+                    className="mb-12 md:mb-16"
                   >
-                    <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[12px] mb-8 flex items-center gap-3">
-                      <Globe size={18} /> THE ARCHITECTURE
+                    <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[10px] mb-6 flex items-center gap-3">
+                      <Globe size={16} /> THE ARCHITECTURE
                     </h5>
-                    <p className="text-2xl md:text-4xl font-display font-medium leading-relaxed text-foreground/90 italic border-l-4 border-primary pl-8">
+                    <p className="text-xl md:text-2xl font-display font-medium leading-relaxed text-foreground/90 italic border-l-2 border-primary pl-6">
                       {selectedProject.longDescription}
                     </p>
                   </motion.section>
 
-                  <div className="grid grid-cols-1 gap-12 md:gap-20">
+                  <div className="grid grid-cols-1 gap-10 md:gap-14">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="space-y-6 md:space-y-8"
+                      className="space-y-4 md:space-y-6"
                     >
-                      <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[12px] flex items-center gap-3">
-                        <ShieldAlert size={18} /> MISSION CRITICAL CHALLENGE
+                      <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[10px] flex items-center gap-3">
+                        <ShieldAlert size={16} /> MISSION CRITICAL CHALLENGE
                       </h5>
-                      <p className="text-xl md:text-2xl text-muted-foreground/90 leading-relaxed font-medium">
+                      <p className="text-lg md:text-xl text-muted-foreground/90 leading-relaxed font-medium">
                         {selectedProject.details.challenge}
                       </p>
                     </motion.div>
@@ -393,12 +409,12 @@ export default function Projects() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6 }}
-                      className="space-y-6 md:space-y-8"
+                      className="space-y-4 md:space-y-6"
                     >
-                      <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[12px] flex items-center gap-3">
-                        <Cpu size={18} /> ENGINEERING STRATEGY
+                      <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[10px] flex items-center gap-3">
+                        <Cpu size={16} /> ENGINEERING STRATEGY
                       </h5>
-                      <p className="text-xl md:text-2xl text-muted-foreground/90 leading-relaxed font-medium">
+                      <p className="text-lg md:text-xl text-muted-foreground/90 leading-relaxed font-medium">
                         {selectedProject.details.solution}
                       </p>
                     </motion.div>
@@ -407,26 +423,26 @@ export default function Projects() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.7 }}
-                      className="p-10 md:p-16 rounded-[3rem] bg-primary/5 border border-primary/20 space-y-8 md:space-y-10 shadow-2xl relative overflow-hidden"
+                      className="p-8 md:p-12 rounded-[2.5rem] bg-primary/5 border border-primary/20 space-y-6 md:space-y-8 shadow-xl relative overflow-hidden"
                     >
-                      <div className="absolute top-0 right-0 p-8 text-primary opacity-20">
-                        <Zap size={100} strokeWidth={1} />
+                      <div className="absolute top-0 right-0 p-6 text-primary opacity-20">
+                        <Zap size={80} strokeWidth={1} />
                       </div>
-                      <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[12px] flex items-center gap-3">
-                        <Zap size={18} /> BUSINESS QUANTUM LEAP
+                      <h5 className="text-primary font-black uppercase tracking-[0.4em] text-[10px] flex items-center gap-3">
+                        <Zap size={16} /> BUSINESS QUANTUM LEAP
                       </h5>
-                      <p className="text-2xl md:text-4xl font-display font-black text-foreground relative z-10">
+                      <p className="text-xl md:text-3xl font-display font-black text-foreground relative z-10">
                         {selectedProject.details.result}
                       </p>
                     </motion.div>
                   </div>
 
-                  <div className="mt-20 md:mt-32 pt-10 md:pt-14 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-primary">
-                      <CheckCircle2 size={24} />
+                  <div className="mt-16 md:mt-24 pt-8 md:pt-10 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-primary">
+                      <CheckCircle2 size={20} />
                       PRODUCTION GRADE VERIFIED
                     </div>
-                    <button className="px-8 py-4 rounded-full bg-secondary/50 border border-white/5 text-[11px] font-black uppercase tracking-[0.4em] hover:bg-primary hover:text-white transition-all duration-500">
+                    <button className="px-6 py-3 rounded-xl bg-secondary/50 border border-white/5 text-[9px] font-black uppercase tracking-[0.4em] hover:bg-primary hover:text-white transition-all duration-500">
                       TECHNICAL DOCUMENTATION
                     </button>
                   </div>
