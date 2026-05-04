@@ -188,6 +188,6 @@ export default function Chatbot() {
           )}
         </button>
       </motion.div>
-    </div>v>
+    </div>
   );
 }

@@ -1,13 +1,21 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { ArrowRight, Download, Sparkles } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function Hero() {
-  const [activeColorTheme, setActiveColorTheme] = useState("theme-emerald");
+  const [activeColorTheme, setActiveColorTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      const classes = document.documentElement.className;
+      if (classes.includes("theme-rose")) return "theme-rose";
+      if (classes.includes("theme-gold")) return "theme-gold";
+      if (classes.includes("theme-sapphire")) return "theme-sapphire";
+    }
+    return "theme-emerald";
+  });
 
   useEffect(() => {
     // Sync with global theme (Navbar handles localStorage)
@@ -25,15 +33,6 @@ export default function Hero() {
       attributes: true,
       attributeFilter: ["class"],
     });
-
-    // Initial sync
-    const initialClasses = document.documentElement.className;
-    if (initialClasses.includes("theme-rose"))
-      setActiveColorTheme("theme-rose");
-    else if (initialClasses.includes("theme-gold"))
-      setActiveColorTheme("theme-gold");
-    else if (initialClasses.includes("theme-sapphire"))
-      setActiveColorTheme("theme-sapphire");
 
     return () => observer.disconnect();
   }, []);
