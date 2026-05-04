@@ -14,37 +14,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageCircle, Send, X, Bot, Sparkles, RefreshCcw, AlertCircle } from "lucide-react";
+import { MessageCircle, Send, X, Bot, Sparkles } from "lucide-react";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { 
-    messages, 
-    sendMessage, 
-    status,
-    // Note: In this version of the SDK, error and reload might be handled differently
-  } = useChat();
+  // In this version of the SDK (Generative UI), useChat provides sendMessage and messages, but not input management.
+  const { messages, sendMessage, status } = useChat();
 
   const isLoading = status === "submitted" || status === "streaming";
 
-  // Auto-scroll to bottom on new messages
+  // Robust auto-scroll using a bottom anchor
   useEffect(() => {
-    if (scrollRef.current) {
-      const scrollContainer = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, status]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+    
     const text = input;
     setInput("");
+    
     try {
       await sendMessage({ text });
     } catch (err) {
@@ -52,12 +45,26 @@ export default function Chatbot() {
     }
   };
 
-  /** Extract text content from a UIMessage's parts array */
-  const getMessageText = (parts: any[]): string => {
-    return parts
-      .filter((p) => p.type === "text" && typeof p.text === "string")
-      .map((p) => p.text)
-      .join("");
+  interface ChatMessagePart {
+    type: string;
+    text?: string;
+  }
+
+  interface ChatMessage {
+    id: string;
+    role: "user" | "assistant" | "system" | "data";
+    parts?: ChatMessagePart[];
+    content?: string;
+  }
+
+  const getMessageText = (m: ChatMessage): string => {
+    if (m.parts && Array.isArray(m.parts)) {
+      return m.parts
+        .filter((p: ChatMessagePart) => p.type === "text" && typeof p.text === "string")
+        .map((p: ChatMessagePart) => p.text as string)
+        .join("");
+    }
+    return m.content || "";
   };
 
   return (
@@ -101,16 +108,19 @@ export default function Chatbot() {
               </CardHeader>
 
               <CardContent className="p-0 bg-transparent">
-                <ScrollArea ref={scrollRef} className="h-[400px] md:h-[450px] p-6 md:p-8">
+                <ScrollArea className="h-[400px] md:h-[450px] p-6 md:p-8">
                   {messages.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center space-y-6 py-12">
                       <div className="w-20 h-20 rounded-[2rem] bg-primary/5 border border-primary/10 flex items-center justify-center text-primary/40">
                         <Sparkles size={32} />
                       </div>
                       <div className="space-y-3">
-                        <p className="text-2xl font-display font-black tracking-tighter uppercase">Query Input Required</p>
+                        <p className="text-2xl font-display font-black tracking-tighter uppercase">
+                          Query Input Required
+                        </p>
                         <p className="text-xs text-muted-foreground/60 px-8 font-medium uppercase tracking-widest leading-loose">
-                          Inquire about technical architecture, system design, or professional trajectory.
+                          Inquire about technical architecture, system design,
+                          or professional trajectory.
                         </p>
                       </div>
                     </div>
@@ -141,29 +151,36 @@ export default function Chatbot() {
                                 : "bg-secondary/40 text-foreground rounded-tl-none border border-white/5 backdrop-blur-xl"
                             }`}
                           >
-                            {/* @ts-ignore - Handle parts from UIMessage */}
-                            {m.parts ? getMessageText(m.parts) : (m as any).content}
+                            {getMessageText(m)}
                           </div>
                         </motion.div>
                       ))}
-                      
+
                       {isLoading && (
                         <div className="flex gap-4 items-center">
                           <div className="h-10 w-10 rounded-xl bg-primary/10 animate-pulse border border-primary/20 flex items-center justify-center">
-                            <Bot size={18} className="text-primary animate-bounce" />
+                            <Bot
+                              size={18}
+                              className="text-primary animate-bounce"
+                            />
                           </div>
                           <div className="text-[9px] font-black uppercase tracking-[0.2em] text-primary animate-pulse">
                             Processing Data...
                           </div>
                         </div>
                       )}
+                      {/* Invisible anchor for precise auto-scrolling */}
+                      <div ref={messagesEndRef} />
                     </div>
                   )}
                 </ScrollArea>
               </CardContent>
 
               <CardFooter className="p-4 md:p-6 border-t border-white/5 bg-background/60 backdrop-blur-4xl">
-                <form onSubmit={handleSubmit} className="flex w-full gap-3 md:gap-4">
+                <form
+                  onSubmit={onFormSubmit}
+                  className="flex w-full gap-3 md:gap-4"
+                >
                   <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -185,7 +202,7 @@ export default function Chatbot() {
           </motion.div>
         )}
       </AnimatePresence>
- 
+
       <motion.div
         whileHover={{ scale: 1.05, y: -5 }}
         whileTap={{ scale: 0.95 }}
@@ -201,12 +218,20 @@ export default function Chatbot() {
           {isOpen ? (
             <>
               <X size={24} strokeWidth={3} className="relative z-10" />
-              <span className="font-black uppercase tracking-[0.3em] text-[10px] relative z-10 hidden md:inline">Shutdown</span>
+              <span className="font-black uppercase tracking-[0.3em] text-[10px] relative z-10 hidden md:inline">
+                Shutdown
+              </span>
             </>
           ) : (
             <>
-              <MessageCircle size={24} strokeWidth={3} className="group-hover:rotate-12 transition-transform relative z-10" />
-              <span className="font-black uppercase tracking-[0.3em] text-[10px] relative z-10 hidden md:inline">Core Dialog</span>
+              <MessageCircle
+                size={24}
+                strokeWidth={3}
+                className="group-hover:rotate-12 transition-transform relative z-10"
+              />
+              <span className="font-black uppercase tracking-[0.3em] text-[10px] relative z-10 hidden md:inline">
+                Core Dialog
+              </span>
             </>
           )}
         </button>

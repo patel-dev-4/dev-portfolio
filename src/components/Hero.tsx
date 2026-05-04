@@ -8,15 +8,16 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
 export default function Hero() {
-  const { theme } = useTheme();
+  useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeColorTheme, setActiveColorTheme] = useState("theme-emerald");
 
   useEffect(() => {
-    setMounted(true);
-    // Initial sync with localStorage
-    const savedTheme = localStorage.getItem("color-theme") || "theme-emerald";
-    setActiveColorTheme(savedTheme);
+    requestAnimationFrame(() => {
+      setMounted(true);
+      const savedTheme = localStorage.getItem("color-theme") || "theme-emerald";
+      setActiveColorTheme(savedTheme);
+    });
 
     // Sync with global theme changes
     const handleStorageChange = () => {
@@ -214,7 +215,7 @@ export default function Hero() {
                         src={getLogoPath()}
                         alt="Professional Identity"
                         fill
-                        className="object-contain p-12 transition-transform duration-1000 group-hover:scale-110"
+                        className="object-contain p-12 scale-140 transition-transform duration-1000 group-hover:scale-110"
                         priority
                         unoptimized
                       />

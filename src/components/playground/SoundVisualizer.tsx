@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Music, Pause, Play, Settings2, Sparkles, Info, Activity } from "lucide-react";
+import { Pause, Play, Settings2, Sparkles, Info, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
@@ -86,7 +85,7 @@ export default function SoundVisualizer() {
     setAudioState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
   };
 
-  const draw = useCallback(() => {
+  const draw = useCallback(function drawFrame() {
     if (!canvasRef.current || !audioState.analyzer) return;
 
     const canvas = canvasRef.current;
@@ -95,7 +94,7 @@ export default function SoundVisualizer() {
 
     const { analyzer, frequencyData } = audioState;
     // Bypassing strict ArrayBuffer vs ArrayBufferLike mismatch by casting to any
-    analyzer.getByteFrequencyData(frequencyData as any);
+    analyzer.getByteFrequencyData(frequencyData as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -119,7 +118,7 @@ export default function SoundVisualizer() {
       x += barWidth + 2;
     }
 
-    animationRef.current = requestAnimationFrame(draw);
+    animationRef.current = requestAnimationFrame(drawFrame);
   }, [audioState, sensitivity, colorHue]);
 
   useEffect(() => {

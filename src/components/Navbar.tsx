@@ -64,9 +64,11 @@ export default function Navbar() {
 
   // Prevent hydration mismatch and initialize theme
   useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("color-theme") || "theme-emerald";
-    setActiveColorTheme(savedTheme);
+    requestAnimationFrame(() => {
+      setMounted(true);
+      const savedTheme = localStorage.getItem("color-theme") || "theme-emerald";
+      setActiveColorTheme(savedTheme);
+    });
   }, []);
 
   // Update theme classes on document - efficient syncing
