@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
+import Chatbot from "@/components/Chatbot";
 
 // import ThemeTransition from "@/components/ThemeTransition";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -62,7 +63,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </div>
-          {/* <Chatbot /> */}
+          <Chatbot />
         </ThemeProvider>
       </body>
     </html>
