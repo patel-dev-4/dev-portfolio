@@ -59,35 +59,27 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeColorTheme, setActiveColorTheme] = useState("theme-emerald");
-
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const paletteRef = useRef<HTMLDivElement>(null);
 
-  // Prevent hydration mismatch
+  // Prevent hydration mismatch and initialize theme
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const savedTheme = localStorage.getItem("color-theme") || "theme-emerald";
     setActiveColorTheme(savedTheme);
   }, []);
 
-  // Update theme classes on document
+  // Update theme classes on document - efficient syncing
   useEffect(() => {
     if (mounted) {
-      document.documentElement.className = `${theme} ${activeColorTheme}`;
+      const root = document.documentElement;
+      // Remove all color themes first
+      const themes = colorPresets.map(p => p.theme);
+      root.classList.remove(...themes);
+      // Add active one
+      root.classList.add(activeColorTheme);
     }
-  }, [theme, activeColorTheme, mounted]);
+  }, [activeColorTheme, mounted]);
 
   // Handle click outside to close palette
   useEffect(() => {
@@ -116,6 +108,18 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   const changeColorTheme = (newTheme: string) => {
     setActiveColorTheme(newTheme);
     localStorage.setItem("color-theme", newTheme);
@@ -126,290 +130,219 @@ export default function Navbar() {
     return preset?.logo || "/logo.png";
   };
 
-  if (!mounted) return null;
-
-  return (
-    <nav
-      className={`fixed top-0 left-0 right-0 mx-auto max-w-[2000px] z-50 transition-all duration-700 ${
-        scrolled ? "py-2" : "py-3"
-      }`}
-    >
-      <div className="container mx-auto px-3 md:px-12 flex justify-center">
-        <div
-          className={`flex items-center justify-between w-full max-w-7xl px-4 md:px-10 py-2.5 rounded-full transition-all duration-700 border ${
-            scrolled
-              ? "glass-card shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border-white/10"
-              : "bg-transparent border-transparent"
-          }`}
-        >
-          <Link href="/" className="flex items-center gap-4 group">
-            <div className="relative w-12 h-10 rounded-lg overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl group-hover:scale-105 transition-all duration-700 group-hover:rotate-3">
+  // Render a stable skeleton for SSR to avoid layout shifts
+  const navbarContent = (
+    <div className="container mx-auto px-4 md:px-12 flex justify-center">
+      <div
+        className={`flex flex-nowrap items-center justify-between w-full max-w-7xl px-4 md:px-8 py-2 md:py-2.5 rounded-full transition-all duration-700 border ${
+          scrolled || isOpen
+            ? "glass-card shadow-[0_30px_70px_-15px_rgba(0,0,0,0.4)] border-white/10"
+            : "bg-transparent border-transparent"
+        }`}
+      >
+        <Link href="/" className="flex items-center gap-2 md:gap-4 group shrink-0">
+          <div className="relative w-8 h-7 md:w-12 md:h-10 rounded-lg overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl transition-all duration-700 group-hover:rotate-3">
+            {mounted ? (
               <Image
                 src={getActiveLogo()}
                 alt="Dev Patel Logo"
                 fill
-                className="object-contain p-1.5"
+                className="object-contain p-1"
                 priority
                 unoptimized
               />
-            </div>
-            <div className="flex flex-col space-y-1">
-              <span className="text-lg md:text-xl font-display font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-                DEV PATEL
-              </span>
-              {/* <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] text-primary drop-shadow-sm">
-                ARCHITECT & ENGINEER
-              </span> */}
-            </div>
-          </Link>
+            ) : (
+              <div className="w-full h-full bg-primary/10" />
+            )}
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm md:text-xl font-display font-black tracking-tighter text-foreground whitespace-nowrap">
+              DEV PATEL
+            </span>
+          </div>
+        </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-8">
-            <div className="flex items-center gap-2 bg-white/[0.03] dark:bg-black/20 backdrop-blur-2xl p-1.5 rounded-full border border-white/5">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="px-6 py-2.5 text-[11px] font-black uppercase tracking-widest rounded-full hover:text-primary transition-all duration-500 relative group/item"
-                >
-                  <span className="relative z-10">{link.name}</span>
-                  <motion.div
-                    layoutId="nav-hover"
-                    className="absolute inset-0 bg-primary/10 rounded-full opacity-0 group-hover/item:opacity-100 transition-opacity"
-                  />
-                </Link>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="relative" ref={paletteRef}>
-                <button
-                  onClick={() => setIsPaletteOpen(!isPaletteOpen)}
-                  className={`group flex items-center gap-3 px-6 py-3 rounded-full transition-all duration-700 border ${
-                    isPaletteOpen
-                      ? "bg-primary text-white border-primary shadow-[0_10px_30px_-5px_rgba(var(--primary),0.5)]"
-                      : "bg-secondary/50 border-white/5 text-foreground hover:border-primary/30"
-                  }`}
-                >
-                  <Palette
-                    size={18}
-                    className={`${isPaletteOpen ? "animate-spin-slow" : "group-hover:rotate-12 transition-transform"}`}
-                  />
-                  <span className="text-[11px] font-black uppercase tracking-widest">
-                    System
-                  </span>
-                </button>
-
-                <AnimatePresence>
-                  {isPaletteOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9, y: 20, rotateX: -10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, y: 20, rotateX: -10 }}
-                      className="absolute right-0 mt-6 p-8 rounded-[3rem] bg-background/95 backdrop-blur-[50px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-white/10 min-w-[360px] z-[60]"
-                    >
-                      <div className="flex items-center justify-between mb-8 px-2">
-                        <div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary flex items-center gap-2 mb-1">
-                            <Sparkles size={14} /> Core Config
-                          </p>
-                          <h4 className="text-sm font-black uppercase tracking-widest">
-                            Interface Settings
-                          </h4>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() =>
-                              setTheme(theme === "dark" ? "light" : "dark")
-                            }
-                            className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-500 shadow-xl group/btn"
-                            title="Toggle Light/Dark"
-                          >
-                            {theme === "dark" ? (
-                              <Sun
-                                size={18}
-                                className="group-hover:rotate-90 transition-transform"
-                              />
-                            ) : (
-                              <Moon
-                                size={18}
-                                className="group-hover:-rotate-12 transition-transform"
-                              />
-                            )}
-                          </button>
-                          <button
-                            onClick={() => setIsPaletteOpen(false)}
-                            className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center hover:bg-red-500 hover:text-white transition-all duration-500 shadow-xl"
-                            title="Close"
-                          >
-                            <X size={18} />
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-3">
-                        {colorPresets.map((p) => (
-                          <button
-                            key={p.theme}
-                            onClick={() => changeColorTheme(p.theme)}
-                            className={`flex items-center justify-between p-5 rounded-3xl transition-all duration-500 border group/theme ${
-                              activeColorTheme === p.theme
-                                ? "bg-primary/10 border-primary/40 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)]"
-                                : "border-transparent hover:bg-secondary/80 hover:border-white/5"
-                            }`}
-                          >
-                            <div className="flex items-center gap-5">
-                              <div
-                                className={`w-10 h-10 rounded-2xl ${p.color} shadow-2xl flex items-center justify-center group-hover/theme:scale-110 transition-transform`}
-                              >
-                                {activeColorTheme === p.theme && (
-                                  <div className="w-3 h-3 rounded-full bg-white animate-pulse" />
-                                )}
-                              </div>
-                              <span
-                                className={`text-[11px] font-black uppercase tracking-widest ${activeColorTheme === p.theme ? "text-primary" : "text-foreground"}`}
-                              >
-                                {p.name} Theme
-                              </span>
-                            </div>
-                            {activeColorTheme === p.theme && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center"
-                              >
-                                <Check
-                                  size={16}
-                                  className="text-primary"
-                                  strokeWidth={4}
-                                />
-                              </motion.div>
-                            )}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="mt-8 pt-6 border-t border-white/5 text-center">
-                        <p className="text-[9px] font-black text-muted-foreground/50 uppercase tracking-[0.4em]">
-                          Designed for Modernity
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
+        {/* Desktop Nav */}
+        <div className="hidden lg:flex items-center gap-4 xl:gap-8">
+          <div className="flex items-center gap-1 bg-white/[0.03] dark:bg-black/20 backdrop-blur-3xl p-1 rounded-full border border-white/5 shadow-inner">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="px-4 xl:px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-full hover:text-primary transition-all duration-500 relative group/item"
+              >
+                <span className="relative z-10">{link.name}</span>
+                <motion.div
+                  layoutId="nav-hover"
+                  className="absolute inset-0 bg-primary/10 rounded-full opacity-0 group-hover/item:opacity-100 transition-opacity"
+                />
+              </Link>
+            ))}
           </div>
 
-          {/* Mobile Toggle */}
-          <div className="flex lg:hidden items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={`p-3.5 rounded-2xl transition-all border ${isOpen ? "bg-primary text-white border-primary shadow-lg" : "bg-white/5 border-white/10 backdrop-blur-md"}`}
-            >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+          <div className="flex items-center gap-3">
+            <div className="relative" ref={paletteRef}>
+              <button
+                onClick={() => setIsPaletteOpen(!isPaletteOpen)}
+                className={`group flex items-center gap-3 px-5 py-2.5 rounded-full transition-all duration-700 border ${
+                  isPaletteOpen
+                    ? "bg-primary text-white border-primary shadow-2xl"
+                    : "bg-secondary/50 border-white/5 text-foreground hover:border-primary/30"
+                }`}
+              >
+                <Palette size={16} />
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  System
+                </span>
+              </button>
+
+              <AnimatePresence>
+                {isPaletteOpen && mounted && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                    className="absolute right-0 mt-6 p-6 rounded-[2rem] bg-background/95 backdrop-blur-4xl shadow-[0_50px_100px_-20px_rgba(0,0,0,0.6)] border border-white/10 min-w-[320px] z-[60]"
+                  >
+                    <div className="flex items-center justify-between mb-6 px-1">
+                      <div>
+                        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-primary flex items-center gap-2 mb-1">
+                          <Sparkles size={14} /> Intelligence
+                        </p>
+                        <h4 className="text-xs font-black uppercase tracking-widest">Settings</h4>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                          className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg"
+                        >
+                          {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-2">
+                      {colorPresets.map((p) => (
+                        <button
+                          key={p.theme}
+                          onClick={() => changeColorTheme(p.theme)}
+                          className={`flex items-center justify-between p-3.5 rounded-xl transition-all border ${
+                            activeColorTheme === p.theme
+                              ? "bg-primary/10 border-primary/40"
+                              : "border-transparent hover:bg-secondary/50"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-6 h-6 rounded-lg ${p.color} shadow-lg`} />
+                            <span className="text-[9px] font-black uppercase tracking-widest">{p.name}</span>
+                          </div>
+                          {activeColorTheme === p.theme && <Check size={14} className="text-primary" />}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
+
+        {/* Mobile Toggle */}
+        <div className="flex lg:hidden items-center">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className={`p-2.5 rounded-xl transition-all border ${
+              isOpen ? "bg-primary text-white border-primary shadow-lg" : "bg-white/5 border-white/10"
+            }`}
+          >
+            {isOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
       </div>
+    </div>
+  );
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 mx-auto max-w-[2000px] z-50 transition-all duration-700 ${
+        scrolled ? "py-2" : "py-4 md:py-6"
+      }`}
+    >
+      {navbarContent}
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-md lg:hidden z-[90]"
-            />
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 100 }}
-              className="lg:hidden fixed inset-y-0 right-0 w-full max-w-[320px] bg-background border-l border-white/10 z-[100] shadow-[-20px_0_50px_rgba(0,0,0,0.5)] flex flex-col"
-            >
-              <div className="flex-1 overflow-y-auto p-8 pt-24" data-lenis-prevent>
-                {/* Close Button Inside Drawer */}
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="absolute top-8 right-8 w-12 h-12 rounded-2xl bg-secondary/50 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg active:scale-90"
-                >
-                  <X size={24} />
-                </button>
+          <motion.div
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="lg:hidden fixed inset-0 bg-background z-[100] flex flex-col"
+          >
+            <div className="flex items-center justify-between p-6 md:p-8 border-b border-white/5">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">System Navigation</span>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-12 h-12 rounded-2xl bg-secondary/50 border border-white/5 flex items-center justify-center shadow-2xl"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
-                <div className="flex items-center justify-between mb-10">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-1">
-                      Appearance
+            <div className="flex-grow overflow-y-auto p-8 md:p-12 custom-scrollbar">
+              <div className="space-y-6 md:space-y-8 mb-16">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between py-2 group"
+                  >
+                    <span className="text-3xl md:text-5xl font-display font-black uppercase tracking-tighter group-hover:text-primary transition-colors">
+                      {link.name}
                     </span>
-                    <span className="text-sm font-black uppercase tracking-widest">
-                      {theme === "dark" ? "Deep Obsidian" : "Atmospheric Light"}
-                    </span>
-                  </div>
+                    <ArrowUpRightIcon size={24} className="opacity-20 group-hover:opacity-100 group-hover:text-primary transition-all" />
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-auto border-t border-white/5 pt-12">
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground mb-8">Interface Settings</p>
+                
+                <div className="flex items-center justify-between mb-8 p-6 rounded-3xl bg-white/5 border border-white/5">
+                  <span className="text-xs font-black uppercase tracking-widest">Dark Mode</span>
                   <button
-                    onClick={() =>
-                      setTheme(theme === "dark" ? "light" : "dark")
-                    }
-                    className="w-12 h-12 rounded-2xl bg-secondary/80 border border-white/10 flex items-center justify-center transition-all active:scale-90 shadow-xl"
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg"
                   >
                     {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-12">
+                <div className="grid grid-cols-2 gap-4">
                   {colorPresets.map((p) => (
                     <button
                       key={p.theme}
                       onClick={() => changeColorTheme(p.theme)}
-                      className={`flex flex-col items-center gap-3 p-5 rounded-[2.5rem] transition-all border ${
+                      className={`flex flex-col items-center gap-3 p-6 rounded-[2rem] border transition-all ${
                         activeColorTheme === p.theme
-                          ? "bg-primary/10 border-primary/30"
+                          ? "bg-primary/10 border-primary/30 shadow-[inset_0_0_20px_rgba(var(--primary),0.1)]"
                           : "bg-white/5 border-white/5"
                       }`}
                     >
-                      <div
-                        className={`w-10 h-10 rounded-2xl ${p.color} shadow-2xl`}
-                      />
-                      <span className="text-[10px] font-black uppercase tracking-widest">
-                        {p.name}
-                      </span>
+                      <div className={`w-8 h-8 rounded-xl ${p.color} shadow-lg`} />
+                      <span className="text-[9px] font-black uppercase tracking-widest">{p.name}</span>
                     </button>
                   ))}
                 </div>
-
-                <div className="space-y-4 py-8 border-t border-white/5">
-                  {navLinks.map((link, idx) => (
-                    <motion.div
-                      key={link.name}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                    >
-                      <Link
-                        href={link.href}
-                        onClick={() => setIsOpen(false)}
-                        className="px-6 py-6 text-2xl font-black uppercase tracking-widest hover:text-primary transition-all flex items-center justify-between group border-b border-white/5"
-                      >
-                        {link.name}
-                        <ArrowUpRightIcon
-                          size={24}
-                          className="text-primary opacity-30 group-hover:opacity-100 transition-opacity"
-                        />
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
-
-                <div className="mt-auto p-6 bg-primary/5 rounded-[2.5rem] border border-primary/10 text-center">
-                  <p className="text-[11px] font-black text-primary uppercase tracking-[0.3em]">
-                    Built for the Future
-                  </p>
-                </div>
               </div>
-            </motion.div>
-          </>
+            </div>
+            
+            <div className="p-8 border-t border-white/5 bg-secondary/20 text-center">
+               <p className="text-[9px] font-black uppercase tracking-[0.5em] text-muted-foreground/50">Designed & Engineered by Dev Patel</p>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </nav>

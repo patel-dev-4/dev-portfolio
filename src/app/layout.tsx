@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-// import Chatbot from "@/components/Chatbot";
+import Chatbot from "@/components/Chatbot";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -63,7 +63,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </div>
-          {/* <Chatbot /> */}
+          <Chatbot />
         </ThemeProvider>
       </body>
     </html>

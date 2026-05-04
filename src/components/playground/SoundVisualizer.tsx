@@ -1,185 +1,226 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Play, Pause, Activity, SkipForward, SkipBack } from "lucide-react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Music, Pause, Play, Settings2, Sparkles, Info, Activity } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Card } from "@/components/ui/card";
 
-const SAMPLE_AUDIO = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+interface AudioState {
+  isPlaying: boolean;
+  frequencyData: Uint8Array;
+  analyzer: AnalyserNode | null;
+  audioContext: AudioContext | null;
+  source: MediaElementAudioSourceNode | null;
+}
+
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext;
+  }
+}
 
 export default function SoundVisualizer() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const animationIdRef = useRef<number | null>(null);
-  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const animationRef = useRef<number | null>(null);
+  const [audioState, setAudioState] = useState<AudioState>({
+    isPlaying: false,
+    frequencyData: new Uint8Array(0),
+    analyzer: null,
+    audioContext: null,
+    source: null,
+  });
 
-  const draw = useCallback(() => {
-    if (!canvasRef.current || !analyserRef.current) return;
+  const [sensitivity, setSensitivity] = useState(1.2);
+  const [colorHue, setColorHue] = useState(160);
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d")!;
-    const analyser = analyserRef.current;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
+  const initAudio = useCallback(() => {
+    if (!audioRef.current || audioState.audioContext) return;
 
-    const renderFrame = () => {
-      animationIdRef.current = requestAnimationFrame(renderFrame);
-      analyser.getByteFrequencyData(dataArray);
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContextClass();
+      const analyzerNode = ctx.createAnalyser();
+      const sourceNode = ctx.createMediaElementSource(audioRef.current);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      sourceNode.connect(analyzerNode);
+      analyzerNode.connect(ctx.destination);
+      analyzerNode.fftSize = 256;
 
-      const barWidth = (canvas.width / bufferLength) * 2.5;
-      let barHeight;
-      let x = 0;
+      const bufferLength = analyzerNode.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
-      for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] / 2;
+      setAudioState((prev) => ({
+        ...prev,
+        audioContext: ctx,
+        analyzer: analyzerNode,
+        source: sourceNode,
+        frequencyData: dataArray,
+      }));
+    } catch (error) {
+      console.error("Audio Initialization Failed:", error);
+    }
+  }, [audioState.audioContext]);
 
-        // Gradient color based on frequency
-        const hue = (i / bufferLength) * 360;
-        ctx.fillStyle = `hsla(${hue}, 70%, 60%, 0.8)`;
-        
-        // Draw bars with rounded corners (simulated)
-        ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+  const togglePlay = async () => {
+    if (!audioRef.current) return;
 
-        x += barWidth;
-      }
-    };
-
-    renderFrame();
-  }, []);
-
-  useEffect(() => {
-    if (isPlaying && !audioContextRef.current) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 256;
-      
-      const source = audioContext.createMediaElementSource(audioRef.current!);
-      source.connect(analyser);
-      analyser.connect(audioContext.destination);
-      
-      audioContextRef.current = audioContext;
-      analyserRef.current = analyser;
-      sourceRef.current = source;
+    if (!audioState.audioContext) {
+      initAudio();
     }
 
-    if (isPlaying) {
-      draw();
+    if (audioState.isPlaying) {
+      audioRef.current.pause();
     } else {
-      if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
-    }
-
-    return () => {
-      if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
-    };
-  }, [isPlaying, draw]);
-
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        // Set playing state immediately for UI responsiveness
-        setIsPlaying(true);
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch((error) => {
-            console.error("Playback failed or was interrupted:", error);
-            setIsPlaying(false);
-          });
-        }
+      if (audioState.audioContext?.state === "suspended") {
+        await audioState.audioContext.resume();
+      }
+      try {
+        await audioRef.current.play();
+      } catch (err) {
+        console.error("Playback failed:", err);
       }
     }
+    setAudioState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
   };
 
+  const draw = useCallback(() => {
+    if (!canvasRef.current || !audioState.analyzer) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const { analyzer, frequencyData } = audioState;
+    // Bypassing strict ArrayBuffer vs ArrayBufferLike mismatch by casting to any
+    analyzer.getByteFrequencyData(frequencyData as any);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const barWidth = (canvas.width / frequencyData.length) * 2;
+    let x = 0;
+
+    for (let i = 0; i < frequencyData.length; i++) {
+      const barHeight = (frequencyData[i] / 2) * sensitivity;
+
+      const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
+      gradient.addColorStop(0, `hsla(${colorHue}, 80%, 50%, 0.1)`);
+      gradient.addColorStop(1, `hsla(${(colorHue + 60) % 360}, 100%, 60%, 1)`);
+
+      ctx.fillStyle = gradient;
+      // Draw rounded rect bars
+      const radius = 4;
+      ctx.beginPath();
+      ctx.roundRect(x, canvas.height - barHeight, barWidth - 2, barHeight, [radius, radius, 0, 0]);
+      ctx.fill();
+
+      x += barWidth + 2;
+    }
+
+    animationRef.current = requestAnimationFrame(draw);
+  }, [audioState, sensitivity, colorHue]);
+
+  useEffect(() => {
+    if (audioState.isPlaying) {
+      animationRef.current = requestAnimationFrame(draw);
+    } else if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [audioState.isPlaying, draw]);
+
   return (
-    <div className="flex flex-col h-full items-center justify-center gap-12 py-8">
-      <div className="text-center">
-        <h2 className="text-3xl font-black mb-4 uppercase tracking-tighter flex items-center justify-center gap-3">
-           <Activity className="text-primary" /> Dynamic Sound Visualizer
-        </h2>
-        <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold">
-           Experience real-time frequency mapping through the Web Audio API
-        </p>
+    <Card className="p-8 bg-card/40 backdrop-blur-3xl border-white/5 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-8 text-white/5 group-hover:text-primary/10 transition-colors pointer-events-none">
+        <Activity size={120} strokeWidth={0.5} />
       </div>
 
-      <div className="relative w-full max-w-4xl h-64 bg-secondary/20 rounded-[3rem] border border-border overflow-hidden group">
-        <canvas 
-          ref={canvasRef}
-          width={800}
-          height={256}
-          className="w-full h-full"
-        />
-        
-        {/* Playback Overlay */}
-        {!isPlaying && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm transition-all">
-             <motion.button
-               whileHover={{ scale: 1.1 }}
-               whileTap={{ scale: 0.9 }}
-               onClick={togglePlay}
-               className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center shadow-2xl shadow-primary/40"
-             >
-                <Play size={32} fill="currentColor" />
-             </motion.button>
+      <div className="flex flex-col gap-8 relative z-10">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h3 className="text-xl font-display font-black tracking-tighter uppercase">Waveform Intel</h3>
+            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+              <div className={`w-1.5 h-1.5 rounded-full ${audioState.isPlaying ? "bg-primary animate-pulse" : "bg-zinc-700"}`} />
+              {audioState.isPlaying ? "Active Processing" : "System Idle"}
+            </div>
           </div>
-        )}
-      </div>
+          <Button
+            onClick={togglePlay}
+            size="icon"
+            className="h-16 w-16 rounded-2xl bg-primary hover:bg-primary/90 transition-all shadow-xl active:scale-95"
+          >
+            {audioState.isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
+          </Button>
+        </div>
 
-      {/* Controls */}
-      <div className="flex flex-col items-center gap-6 w-full max-w-md">
-         <div className="flex items-center gap-8">
-            <button className="text-muted-foreground hover:text-primary transition-colors">
-               <SkipBack size={24} />
-            </button>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={togglePlay}
-              className="w-16 h-16 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-primary transition-all"
-            >
-               {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
-            </motion.button>
-            <button className="text-muted-foreground hover:text-primary transition-colors">
-               <SkipForward size={24} />
-            </button>
-         </div>
-         
-         <div className="w-full flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-               <span className="text-[10px] font-black uppercase tracking-widest text-primary">Now Playing</span>
-               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Ambient Flow .mp3</span>
+        <div className="relative aspect-video bg-black/40 rounded-3xl border border-white/5 overflow-hidden shadow-inner">
+          <canvas
+            ref={canvasRef}
+            width={800}
+            height={400}
+            className="w-full h-full object-cover"
+          />
+          {!audioState.isPlaying && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">Initialize Audio Sequence</p>
             </div>
-            <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
-               <motion.div 
-                 animate={{ x: isPlaying ? ["-100%", "0%"] : "0%" }}
-                 transition={{ duration: 180, ease: "linear", repeat: Infinity }}
-                 className="h-full bg-primary w-full"
-               />
+          )}
+        </div>
+
+        <audio
+          ref={audioRef}
+          src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+          crossOrigin="anonymous"
+          onEnded={() => setAudioState(prev => ({ ...prev, isPlaying: false }))}
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between px-1">
+              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                <Settings2 size={12} /> Sensitivity
+              </span>
+              <span className="text-[10px] font-mono text-primary">{sensitivity.toFixed(1)}x</span>
             </div>
-         </div>
-      </div>
+            <Slider
+              value={[sensitivity]}
+              onValueChange={([val]: number[]) => setSensitivity(val)}
+              min={0.5}
+              max={2.5}
+              step={0.1}
+              className="py-4"
+            />
+          </div>
 
-      <audio 
-        ref={audioRef}
-        src={SAMPLE_AUDIO}
-        crossOrigin="anonymous"
-        onEnded={() => setIsPlaying(false)}
-      />
+          <div className="space-y-4">
+            <div className="flex items-center justify-between px-1">
+              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                <Sparkles size={12} /> Spectrum Shift
+              </span>
+              <span className="text-[10px] font-mono text-primary">{colorHue}°</span>
+            </div>
+            <Slider
+              value={[colorHue]}
+              onValueChange={([val]: number[]) => setColorHue(val)}
+              min={0}
+              max={360}
+              step={1}
+              className="py-4"
+            />
+          </div>
+        </div>
 
-      {/* Explanation Section */}
-      <div className="w-full max-w-2xl bg-secondary/10 rounded-3xl p-8 border border-border mt-8">
-         <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary mb-3">What is Sound Visualization?</h4>
-         <p className="text-sm text-muted-foreground leading-relaxed">
-            Sound visualization translates audio data into dynamic visual patterns in real-time. This tool uses the <strong>Web Audio API</strong> to capture frequency data from the music. 
-            <br /><br />
-            The bars on the screen represent different audio frequencies—the left side shows the <strong>Bass</strong> (low frequencies), and the right side shows the <strong>Treble</strong> (high frequencies). When the music plays, the heights of the bars change based on the volume of each frequency, creating a &quot;spectrum&quot; of the sound.
-         </p>
+        <div className="pt-6 border-t border-white/5 flex items-center gap-4 text-muted-foreground">
+          <Info size={14} className="text-primary" />
+          <p className="text-[9px] font-black uppercase tracking-widest leading-loose">
+            Frequency data extracted via Web Audio API. Visualized through low-latency Canvas render loop.
+          </p>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 }
