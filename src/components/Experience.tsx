@@ -55,76 +55,93 @@ const experiences = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="section-padding relative overflow-hidden bg-secondary/5">
-      {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] -z-10" />
-      
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-            Professional Timeline
-          </div>
-          <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter">Career Journey.</h2>
-          <p className="text-xl md:text-2xl text-muted-foreground/80 font-medium mb-24 max-w-2xl leading-relaxed">
-            A visual roadmap of my growth, from foundational internships to 
-            architecting enterprise-grade financial systems.
+    <section id="experience" className="section-padding bg-background relative overflow-hidden">
+      {/* Background ambient elements */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 blur-[140px] rounded-full -mr-300 -mt-300" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/5 blur-[120px] rounded-full -ml-200 -mb-200" />
+
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-black uppercase tracking-[0.4em] mb-10 shadow-sm backdrop-blur-md"
+          >
+            Chronicle
+          </motion.div>
+          <h2 className="text-6xl md:text-9xl font-display font-black mb-12 tracking-tighter leading-[0.85]">
+            THE CAREER <br /><span className="text-primary text-gradient">TRAJECTORY.</span>
+          </h2>
+          <p className="text-xl md:text-3xl text-muted-foreground/80 font-medium mb-16 md:mb-32 max-w-3xl leading-relaxed">
+            A precise record of growth and engineering contributions within the 
+            enterprise software ecosystem.
           </p>
 
           <div className="relative">
             {/* Timeline Line */}
-            <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/50 via-border to-transparent -translate-x-1/2 hidden md:block" />
+            <div className="absolute left-0 md:left-[50%] top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary/80 via-white/5 to-transparent -translate-x-1/2 hidden md:block" />
 
-            <div className="space-y-24">
+            <div className="space-y-20 md:space-y-40">
               {experiences.map((exp, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  className={`relative flex flex-col md:flex-row gap-8 md:gap-0 ${
+                  transition={{ duration: 1, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className={`relative flex flex-col md:flex-row gap-12 md:gap-0 ${
                     index % 2 === 0 ? "md:flex-row-reverse" : ""
                   }`}
                 >
                   {/* Timeline Dot/Icon */}
-                  <div className="absolute left-0 md:left-1/2 top-0 w-12 h-12 rounded-2xl bg-background border-2 border-primary/30 flex items-center justify-center text-primary shadow-xl shadow-primary/10 -translate-x-1/2 z-20 transition-transform group-hover:scale-110">
-                    {exp.icon}
-                  </div>
+                  <motion.div 
+                    whileHover={{ scale: 1.2, rotate: 360 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute left-0 md:left-1/2 top-0 w-16 h-16 rounded-3xl bg-card border-2 border-primary/40 flex items-center justify-center text-primary shadow-[0_20px_40px_-10px_rgba(var(--primary),0.3)] -translate-x-1/2 z-20 backdrop-blur-3xl"
+                  >
+                    <div className="scale-125">{exp.icon}</div>
+                  </motion.div>
 
                   {/* Content Card */}
                   <div className={`w-full md:w-[45%] ${index % 2 === 0 ? "md:pl-0" : "md:pr-0"}`}>
-                    <div className="glass-card p-8 md:p-10 rounded-[2.5rem] border border-border/50 hover:border-primary/30 transition-all group relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+                    <div className="p-10 md:p-16 rounded-4xl border border-white/10 bg-card/30 backdrop-blur-4xl hover:border-primary/40 transition-all duration-700 group relative overflow-hidden shadow-2xl">
+                      <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                       
-                      <div className="flex items-center gap-3 mb-6">
-                        <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
+                      <div className="flex flex-wrap items-center gap-4 mb-10">
+                        <span className="px-5 py-2 rounded-xl bg-primary/10 text-primary text-[11px] font-black uppercase tracking-[0.3em] border border-primary/20 shadow-lg">
                           {exp.period}
                         </span>
                         {exp.isPromoted && (
-                          <span className="px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-black uppercase tracking-widest border border-accent/20 animate-pulse">
-                            Promotion
+                          <span className="px-5 py-2 rounded-xl bg-accent/20 text-accent text-[11px] font-black uppercase tracking-[0.3em] border border-accent/30 animate-pulse shadow-lg shadow-accent/10">
+                            PROMOTION
                           </span>
                         )}
                       </div>
 
-                      <h3 className="text-2xl md:text-3xl font-black mb-2 tracking-tight group-hover:text-primary transition-colors">
+                      <h3 className="text-3xl md:text-5xl font-display font-black mb-4 tracking-tighter group-hover:text-primary transition-colors duration-500 leading-none">
                         {exp.title}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-4 text-muted-foreground font-bold text-xs mb-6">
-                        <span className="flex items-center gap-1.5"><Briefcase size={14} className="text-primary" /> {exp.company}</span>
-                        <span className="flex items-center gap-1.5"><MapPin size={14} className="text-primary" /> {exp.location}</span>
+                      <div className="flex flex-wrap items-center gap-6 text-muted-foreground/60 font-black text-[10px] md:text-xs uppercase tracking-[0.2em] mb-10">
+                        <span className="flex items-center gap-2 text-foreground"><Briefcase size={16} className="text-primary" /> {exp.company}</span>
+                        <span className="flex items-center gap-2"><MapPin size={16} className="text-primary" /> {exp.location}</span>
                       </div>
 
-                      <p className="text-muted-foreground/90 font-medium leading-relaxed mb-8 text-sm italic">
-                        &quot;{exp.description}&quot;
+                      <p className="text-xl md:text-2xl text-muted-foreground/90 font-medium leading-relaxed mb-12 italic border-l-2 border-white/10 pl-8">
+                        {exp.description}
                       </p>
 
-                      <div className="space-y-4">
+                      <div className="space-y-6 md:space-y-8">
                         {exp.duties.map((duty, dIndex) => (
-                          <div key={dIndex} className="flex items-start gap-3">
-                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                            <p className="text-muted-foreground font-bold leading-relaxed text-xs">{duty}</p>
-                          </div>
+                          <motion.div 
+                            key={dIndex} 
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 + dIndex * 0.1 }}
+                            className="flex items-start gap-5"
+                          >
+                            <div className="mt-2.5 w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)] shrink-0" />
+                            <p className="text-muted-foreground/80 font-medium leading-relaxed text-sm md:text-base">{duty}</p>
+                          </motion.div>
                         ))}
                       </div>
                     </div>

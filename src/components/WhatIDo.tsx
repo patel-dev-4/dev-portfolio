@@ -57,38 +57,59 @@ const services = [
 
 export default function WhatIDo() {
   return (
-    <section id="expertise" className="section-padding">
-      <div className="container mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-sm uppercase tracking-[0.3em] text-primary font-bold mb-4">Core Expertise</h2>
-          <h3 className="text-4xl font-bold mb-6">Bridging Code and Business.</h3>
-          <p className="text-lg text-muted-foreground">
-            Specialized services focused on delivering high-quality, production-ready software solutions 
-            for enterprise and financial sectors.
+    <section id="expertise" className="section-padding bg-secondary/5 relative overflow-hidden">
+      <div className="container mx-auto relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-12 md:mb-32">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-black uppercase tracking-[0.4em] mb-10 shadow-sm"
+          >
+            Capabilities
+          </motion.div>
+          <h3 className="text-5xl md:text-8xl font-display font-black mb-10 tracking-tighter leading-[0.85]">
+            ENGINEERING <br /><span className="text-primary text-gradient">QUANTUM LEAPS.</span>
+          </h3>
+          <p className="text-xl md:text-2xl text-muted-foreground/80 font-medium max-w-3xl mx-auto leading-relaxed">
+            Specialized engineering services focused on high-stakes production environments
+            where failure is not an option.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {services.map((service, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="p-8 rounded-[2rem] border border-border bg-background hover:border-primary/40 transition-all hover:shadow-xl hover:shadow-primary/5 group"
+              transition={{ delay: index * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="p-10 md:p-12 rounded-4xl border border-white/10 bg-card/30 backdrop-blur-3xl hover:border-primary/40 transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(var(--primary),0.15)] group relative overflow-hidden"
             >
-              <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
-                {service.icon}
-              </div>
-              <h4 className="text-lg font-bold mb-3">{service.title}</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              
+              <motion.div 
+                whileHover={{ scale: 1.1, rotate: 10 }}
+                className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-secondary/80 flex items-center justify-center text-primary mb-10 group-hover:bg-primary group-hover:text-white transition-all duration-700 shadow-2xl relative z-10"
+              >
+                <div className="scale-125">{service.icon}</div>
+              </motion.div>
+              
+              <h4 className="text-xl md:text-2xl font-display font-black mb-4 tracking-tighter relative z-10">{service.title}</h4>
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed relative z-10 font-medium group-hover:text-foreground/80 transition-colors">
                 {service.description}
               </p>
+              
+              <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-20 transition-opacity duration-700 rotate-12">
+                {service.icon}
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
+      
+      {/* Background elements */}
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -translate-x-1/2" />
     </section>
   );
 }

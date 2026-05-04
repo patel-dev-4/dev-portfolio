@@ -14,29 +14,40 @@ export default function Hero() {
     const observer = new MutationObserver(() => {
       const classes = document.documentElement.className;
       if (classes.includes("theme-rose")) setActiveColorTheme("theme-rose");
-      else if (classes.includes("theme-gold")) setActiveColorTheme("theme-gold");
-      else if (classes.includes("theme-sapphire")) setActiveColorTheme("theme-sapphire");
+      else if (classes.includes("theme-gold"))
+        setActiveColorTheme("theme-gold");
+      else if (classes.includes("theme-sapphire"))
+        setActiveColorTheme("theme-sapphire");
       else setActiveColorTheme("theme-emerald");
     });
 
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
     // Initial sync
     const initialClasses = document.documentElement.className;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (initialClasses.includes("theme-rose")) setActiveColorTheme("theme-rose");
-    else if (initialClasses.includes("theme-gold")) setActiveColorTheme("theme-gold");
-    else if (initialClasses.includes("theme-sapphire")) setActiveColorTheme("theme-sapphire");
+    if (initialClasses.includes("theme-rose"))
+      setActiveColorTheme("theme-rose");
+    else if (initialClasses.includes("theme-gold"))
+      setActiveColorTheme("theme-gold");
+    else if (initialClasses.includes("theme-sapphire"))
+      setActiveColorTheme("theme-sapphire");
 
     return () => observer.disconnect();
   }, []);
 
   const getLogoPath = () => {
     switch (activeColorTheme) {
-      case "theme-rose": return "/logorose.png";
-      case "theme-gold": return "/logogold.png";
-      case "theme-sapphire": return "/logosaphire.png";
-      default: return "/logo.png";
+      case "theme-rose":
+        return "/logorose.png";
+      case "theme-gold":
+        return "/logogold.png";
+      case "theme-sapphire":
+        return "/logosaphire.png";
+      default:
+        return "/logo.png";
     }
   };
 
@@ -63,64 +74,128 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center pt-24 md:pt-32 pb-16 md:pb-20 overflow-hidden"
+      className="relative min-h-screen flex items-start pt-24 md:pt-30 pb-12 md:pb-20 overflow-hidden"
     >
       {/* Dynamic Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[10%] right-[5%] w-[45vw] h-[45vw] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[5%] left-[5%] w-[40vw] h-[40vw] bg-accent/10 rounded-full blur-[100px]" />
-        
+        <div className="absolute top-[10%] right-[5%] w-[45vw] h-[45vw] bg-primary/15 rounded-full blur-[140px] animate-pulse" />
+        <div className="absolute bottom-[5%] left-[5%] w-[40vw] h-[40vw] bg-accent/10 rounded-full blur-[120px]" />
+
+        {/* Noise Texture Overlay */}
+        <div className="absolute inset-0 noise opacity-[0.03] dark:opacity-[0.05] pointer-events-none" />
+
         {/* Morphing blob */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-primary/5 dark:bg-primary/10 animate-morph opacity-50 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[700px] h-[300px] md:h-[700px] bg-primary/5 dark:bg-primary/10 animate-morph opacity-40 blur-3xl" />
+
+        {/* Subtle Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
       </div>
 
       <div className="container mx-auto px-6 md:px-12">
-        <div className="flex flex-col lg:flex-row items-center gap-12 md:gap-16">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-24">
+          {/* Floating Logo/Identity - Hidden on mobile, visible and shifted UP on desktop */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden lg:flex flex-1 justify-center relative perspective-1000 lg:order-last mb-0 lg:-mt-80 lg:translate-x-12"
+          >
+            <div className="relative w-[480px] h-[480px] group">
+              {/* Complex Background Rings */}
+              <div className="absolute inset-0 rounded-full border-[25px] border-primary/5 animate-[spin_25s_linear_infinite]" />
+              <div className="absolute inset-[8%] rounded-full border-[2px] border-dashed border-primary/20 animate-[spin_40s_linear_infinite_reverse]" />
+              <div className="absolute inset-[-10%] bg-primary/5 rounded-full blur-[80px] animate-pulse" />
+
+              <motion.div
+                whileHover={{ rotateX: 10, rotateY: 10, scale: 1.05 }}
+                className="absolute inset-[12%] glass-card rounded-4xl p-1 flex items-center justify-center shadow-[0_40px_80px_-15px_rgba(0,0,0,0.4)] overflow-hidden transition-all duration-700 hover:shadow-primary/30"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/10 opacity-40 group-hover:opacity-100 transition-opacity duration-1000" />
+                <div className="relative w-full h-full bg-black/40 rounded-[2.5rem] overflow-hidden flex items-center justify-center">
+                  <Image
+                    key={getLogoPath()}
+                    src={getLogoPath()}
+                    alt="Dev Patel Professional Identity"
+                    fill
+                    className="object-contain p-10 scale-125 transition-all duration-1000 group-hover:scale-110"
+                    priority
+                    unoptimized
+                  />
+                </div>
+              </motion.div>
+
+              {/* Floating Tech Chips */}
+              <motion.div
+                animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-5 right-5 p-5 glass rounded-3xl shadow-2xl border border-primary/30 backdrop-blur-2xl z-10"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-black text-xl">
+                  JS
+                </div>
+              </motion.div>
+              <motion.div
+                animate={{ y: [0, 20, 0], x: [0, -10, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-10 left-0 p-5 glass rounded-3xl shadow-2xl border border-accent/30 backdrop-blur-2xl z-10"
+              >
+                <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent font-black text-xl">
+                  TS
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="flex-1 max-w-4xl text-center lg:text-left"
+            className="flex-[1.2] max-w-4xl text-center lg:text-left"
           >
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-3 px-4 md:px-5 py-2 rounded-2xl bg-secondary/80 border border-border/50 text-primary text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-6 md:mb-10 shadow-sm backdrop-blur-sm"
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/20 border border-primary/40 text-primary text-[11px] md:text-sm font-black uppercase tracking-[0.4em] mb-8 md:mb-14 shadow-[0_10px_30px_-5px_rgba(var(--primary),0.2)] backdrop-blur-xl relative overflow-hidden group"
             >
-              <Sparkles size={16} />
-              Full Stack Innovator
+              <div className="absolute inset-0 bg-white/10 translate-x-[-100%] animate-[shimmer_3s_infinite]" />
+              <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(var(--primary),1)]" />
+              Next-Gen Full Stack Architect
             </motion.div>
 
             <motion.h1
               variants={itemVariants}
-              className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tight mb-8 md:mb-10 leading-[1] md:leading-[0.95] text-balance"
+              className="text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] font-black tracking-tighter mb-4 md:mb-14 leading-[0.85] text-balance"
             >
-              Design. <br />
-              <span className="text-primary text-gradient">Develop.</span>{" "}
+              CRAFT.
               <br />
-              Deliver.
+              <span className="text-primary text-gradient drop-shadow-[0_0_30px_rgba(var(--primary),0.2)]">
+                CODE.
+              </span>{" "}
+              <br />
+              CONQUER.
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
-              className="text-lg md:text-2xl lg:text-3xl text-muted-foreground/80 mb-10 md:mb-14 max-w-3xl mx-auto lg:mx-0 leading-relaxed font-medium"
+              className="text-lg md:text-2xl lg:text-3xl text-muted-foreground/90 mb-10 md:mb-16 max-w-3xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 lg:px-0"
             >
               I&apos;m{" "}
-              <span className="text-foreground font-bold underline decoration-primary/30 decoration-4 underline-offset-8">
+              <span className="text-foreground font-bold italic underline decoration-primary/40 decoration-4 md:decoration-8 underline-offset-[8px] md:underline-offset-[12px]">
                 Dev Patel
               </span>
-              , a Full Stack Architect crafting high-performance enterprise
-              systems with a focus on human-centric UI/UX.
+              . Engineering elite digital experiences through high-performance
+              enterprise systems and visionary UI/UX.
             </motion.p>
 
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-4 md:gap-6 mb-16 md:mb-20"
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 md:gap-8 mb-16 md:mb-24 px-4 sm:px-0"
             >
               <Link
                 href="#projects"
-                className="group px-8 md:px-10 py-4 md:py-5 bg-primary text-white rounded-2xl font-black text-base md:text-lg flex items-center gap-3 hover:bg-primary/90 transition-all hover:translate-y-[-4px] shadow-2xl shadow-primary/30 active:scale-95 w-full sm:w-auto justify-center"
+                className="group relative px-8 md:px-12 py-4 md:py-6 bg-primary text-white rounded-2xl font-black text-base md:text-xl flex items-center gap-4 hover:bg-primary/90 transition-all hover:translate-y-[-6px] shadow-[0_20px_40px_-15px_rgba(var(--primary),0.4)] active:scale-95 w-full sm:w-auto justify-center overflow-hidden"
               >
-                Explore My Work
+                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-[-20deg]" />
+                Explore Portfolio
                 <ArrowRight
                   size={20}
                   className="group-hover:translate-x-2 transition-transform"
@@ -129,7 +204,7 @@ export default function Hero() {
               <a
                 href="/resume.pdf"
                 target="_blank"
-                className="px-8 md:px-10 py-4 md:py-5 bg-background/50 backdrop-blur-md border-2 border-border/50 rounded-2xl font-black text-base md:text-lg flex items-center gap-3 hover:bg-secondary transition-all hover:translate-y-[-4px] active:scale-95 shadow-lg w-full sm:w-auto justify-center"
+                className="px-8 md:px-12 py-4 md:py-6 bg-background/40 backdrop-blur-xl border-2 border-primary/20 rounded-2xl font-black text-base md:text-xl flex items-center gap-4 hover:bg-secondary transition-all hover:translate-y-[-6px] active:scale-95 shadow-2xl w-full sm:w-auto justify-center"
               >
                 <Download size={20} /> Resume
               </a>
@@ -137,93 +212,33 @@ export default function Hero() {
 
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-8 md:gap-12 pt-10 md:pt-12 border-t border-border/50"
+              className="grid grid-cols-2 sm:grid-cols-3 gap-8 md:gap-16 pt-12 md:pt-16 border-t border-border/30"
             >
-              <div className="flex flex-col items-center lg:items-start">
-                <span className="text-3xl md:text-4xl font-black text-foreground tracking-tighter">
+              <div className="flex flex-col items-center lg:items-start group">
+                <span className="text-3xl md:text-5xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
                   1+
                 </span>
-                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-                  Years Experience
+                <span className="text-[9px] md:text-[12px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
+                  Years Exp
                 </span>
               </div>
-              <div className="w-px h-8 md:h-10 bg-border/50 hidden sm:block" />
-              <div className="flex flex-col items-center lg:items-start">
-                <span className="text-3xl md:text-4xl font-black text-foreground tracking-tighter">
+              <div className="flex flex-col items-center lg:items-start group">
+                <span className="text-3xl md:text-5xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
                   10+
                 </span>
-                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-                  Successful Projects
+                <span className="text-[9px] md:text-[12px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
+                  Global Projects
                 </span>
               </div>
-              <div className="w-px h-8 md:h-10 bg-border/50 hidden sm:block" />
-              <div className="flex flex-col items-center lg:items-start">
-                <span className="text-3xl md:text-4xl font-black text-foreground tracking-tighter">
+              <div className="flex flex-col items-center lg:items-start group hidden sm:flex">
+                <span className="text-3xl md:text-5xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors duration-500">
                   BFSI
                 </span>
-                <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-                  Specialization
+                <span className="text-[9px] md:text-[12px] font-black uppercase tracking-[0.4em] text-muted-foreground/60 group-hover:text-muted-foreground transition-colors duration-500">
+                  Domain
                 </span>
               </div>
             </motion.div>
-          </motion.div>
-
-          {/* Floating Logo/Identity */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex flex-1 justify-center relative"
-          >
-            <div className="relative w-[500px] h-[500px]">
-              {/* Outer rotating ring */}
-              <div className="absolute inset-0 rounded-full border-[20px] border-primary/5 animate-[spin_20s_linear_infinite]" />
-              <div className="absolute inset-[10%] rounded-full border-[1px] border-dashed border-primary/20 animate-[spin_30s_linear_infinite_reverse]" />
-
-              <div className="absolute inset-[15%] glass-card rounded-[3rem] p-12 flex items-center justify-center shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] group overflow-hidden bg-black/40">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="relative w-full h-full">
-                  <Image
-                    key={getLogoPath()}
-                    src={getLogoPath()}
-                    alt="Dev Patel Professional Identity"
-                    fill
-                    className="object-contain rounded-[3rem] scale-190 transition-all duration-700 group-hover:scale-150"
-                    priority
-                    unoptimized
-                  />
-                </div>
-              </div>
-
-              {/* Floating tech nodes */}
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-0 right-0 p-4 glass rounded-2xl shadow-xl border border-primary/20"
-              >
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-black">
-                  JS
-                </div>
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, 20, 0] }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="absolute bottom-10 left-0 p-4 glass rounded-2xl shadow-xl border border-accent/20"
-              >
-                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent font-black">
-                  TS
-                </div>
-              </motion.div>
-            </div>
           </motion.div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Grotesk, Manrope } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 // import Chatbot from "@/components/Chatbot";
@@ -9,9 +9,14 @@ import ScrollProgress from "@/components/ScrollProgress";
 
 import ThemeTransition from "@/components/ThemeTransition";
 
-const inter = Inter({ 
+const spaceGrotesk = Space_Grotesk({ 
   subsets: ["latin"],
-  variable: '--font-geist-sans',
+  variable: '--font-space-grotesk',
+});
+
+const manrope = Manrope({ 
+  subsets: ["latin"],
+  variable: '--font-manrope',
 });
 
 export const metadata: Metadata = {
@@ -38,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      <body className={`${inter.variable} font-sans bg-background text-foreground antialiased`}>
+      <body className={`${spaceGrotesk.variable} ${manrope.variable} font-sans bg-background text-foreground antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
