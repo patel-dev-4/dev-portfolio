@@ -119,10 +119,10 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 mx-auto max-w-[2000px] z-50 transition-all duration-700 ${
-        scrolled ? "py-4" : "py-8"
+        scrolled ? "py-2" : "py-3"
       }`}
     >
-      <div className="container mx-auto px-4 md:px-12 flex justify-center">
+      <div className="container mx-auto px-3 md:px-12 flex justify-center">
         <div
           className={`flex items-center justify-between w-full max-w-7xl px-6 md:px-10 py-3.5 rounded-full transition-all duration-700 border ${
             scrolled
@@ -131,17 +131,17 @@ export default function Navbar() {
           }`}
         >
           <Link href="/" className="flex items-center gap-4 group">
-            <div className="relative w-12 h-12 rounded-2xl overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl group-hover:scale-110 transition-all duration-700 group-hover:rotate-6">
+            <div className="relative w-16 h-12 rounded-xl overflow-hidden bg-zinc-950 border border-white/10 shadow-2xl group-hover:scale-110 transition-all duration-700 group-hover:rotate-6">
               <Image
                 src={getActiveLogo()}
                 alt="Dev Patel Logo"
                 fill
-                className="object-contain p-2"
+                className="object-contain p-2 scale-200"
                 priority
                 unoptimized
               />
             </div>
-            <div className="flex flex-col -space-y-1">
+            <div className="flex flex-col space-y-1">
               <span className="text-xl md:text-2xl font-display font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
                 DEV PATEL
               </span>
