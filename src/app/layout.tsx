@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 
 import ThemeTransition from "@/components/ThemeTransition";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ["latin"],
@@ -49,15 +50,18 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
+          <SmoothScroll />
           {/* <WelcomeAudio /> */}
           <ThemeTransition />
           <ScrollProgress />
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
+          <div className="max-w-[2000px] mx-auto relative shadow-[0_0_100px_rgba(0,0,0,0.5)] bg-background">
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
           </div>
           {/* <Chatbot /> */}
         </ThemeProvider>

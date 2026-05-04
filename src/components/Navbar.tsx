@@ -118,7 +118,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+      className={`fixed top-0 left-0 right-0 mx-auto max-w-[2000px] z-50 transition-all duration-700 ${
         scrolled ? "py-4" : "py-8"
       }`}
     >
