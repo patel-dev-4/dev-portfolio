@@ -6,35 +6,37 @@ import { Briefcase, MapPin, CheckCircle2, Star, Rocket, Trophy } from "lucide-re
 const experiences = [
   {
     title: "Software Developer",
-    company: "Zonewaves Information Technology",
+    company: "SSBI Group of Companies",
     location: "Ahmedabad, India",
-    period: "Nov 2025 - Present",
+    period: "MAY 2025 - Present",
     isPromoted: true,
     icon: <Trophy className="w-4 h-4" />,
-    description: "Rapidly transitioned from intern to lead contributor for high-stakes enterprise financial systems.",
+    description:
+      "Rapidly transitioned from intern to lead contributor for high-stakes enterprise financial systems.",
     duties: [
       "Architected MSME Financial Product Management System with full dynamic configuration.",
       "Engineered high-performance data grids for complex financial monitoring.",
       "Developed secure API middleware and comprehensive error handling protocols.",
       "Leading frontend architecture using React, TypeScript, and premium UI components.",
-      "Building real-time MIS reporting dashboards for branch-level performance tracking."
-    ]
+      "Building real-time MIS reporting dashboards for branch-level performance tracking.",
+    ],
   },
   {
     title: "Software Development Intern",
     company: "SSBI Group of Companies",
     location: "Ahmedabad, India",
-    period: "Jan 2025 - Nov 2025",
+    period: "DEC 2025 - MAY 2025",
     icon: <Star className="w-4 h-4" />,
-    description: "Intensive internship focused on learning enterprise patterns and contributing to the core banking platform.",
+    description:
+      "Intensive internship focused on learning enterprise patterns and contributing to the core banking platform.",
     duties: [
       "Developed MSME Financial Product Management System with dynamic configuration.",
       "Architected data grids using TanStack Table & Query with server-side pagination.",
       "Optimized API layers using custom Axios interceptors & error middleware.",
       "Built high-fidelity screens using React, TypeScript, and shadcn/ui.",
       "Worked on dynamic forms, approval flows, and real-time MIS dashboards.",
-      "Implemented role-based access control (RBAC) and maker-checker security."
-    ]
+      "Implemented role-based access control (RBAC) and maker-checker security.",
+    ],
   },
   {
     title: "Intern",
@@ -42,16 +44,17 @@ const experiences = [
     location: "Ahmedabad, Gujarat",
     period: "Jan 2025 - April 2025",
     icon: <Rocket className="w-4 h-4" />,
-    description: "Gained foundational experience in Python-Django and professional software engineering practices.",
+    description:
+      "Gained foundational experience in Python-Django and professional software engineering practices.",
     duties: [
       "Mastered Python-Django patterns and professional backend workflows.",
       "Understood SDLC and client-based project delivery in an agile setup.",
       "Assisted in database modeling and complex enterprise API integrations.",
       "Implemented admin-user modules and frontend tools (HTML, JS, CSS).",
       "Participated in professional team deployments and code reviews.",
-      "Debugged production-level UI issues in an agile team environment."
-    ]
-  }
+      "Debugged production-level UI issues in an agile team environment.",
+    ],
+  },
 ];
 
 export default function Experience() {
